@@ -45,3 +45,9 @@ Chromium, Opera, Brave, VS Code and Bitwarden need the `--no-sandbox` flag when
 executed as root. The setup scripts automatically patch their desktop entries so
 they launch correctly inside the container.
 
+## Default root password
+
+The Docker image sets the root password to `root` for convenience when
+accessing a shell or VNC session. Change this in the `Dockerfile` if you need a
+different password.
+

@@ -67,6 +67,9 @@ RUN chmod +x /usr/local/bin/setup-flatpak-apps.sh /usr/local/bin/setup-desktop.s
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Set a default root password for interactive logins
+RUN echo 'root:root' | chpasswd
+
 EXPOSE 80 5901
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
