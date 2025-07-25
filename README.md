@@ -38,3 +38,10 @@ The repository provides `webtop.sh` for common container operations:
 
 Run `./webtop.sh help` to see all available commands.
 
+### Root sandbox restrictions
+
+The container runs applications as the `root` user. Electron-based apps like Chrome,
+Chromium, Opera, Brave, VS Code and Bitwarden need the `--no-sandbox` flag when
+executed as root. The setup scripts automatically patch their desktop entries so
+they launch correctly inside the container.
+

@@ -39,7 +39,7 @@ for app in "${apps[@]}"; do
         cp "/usr/share/applications/$app" "$DESKTOP_DIR/"
         chmod +x "$DESKTOP_DIR/$app"
         case "$app" in
-            google-chrome.desktop|brave-browser.desktop|opera.desktop|chromium-browser.desktop)
+            google-chrome.desktop|brave-browser.desktop|opera.desktop|chromium-browser.desktop|code.desktop)
                 sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@' "$DESKTOP_DIR/$app"
                 ;;
         esac
@@ -61,7 +61,13 @@ for fapp in "${flatpak_ids[@]}"; do
         desktop_path=$(find "$exportdir" -maxdepth 1 -name "$fapp*.desktop" 2>/dev/null | head -n1)
         if [ -n "$desktop_path" ]; then
             cp "$desktop_path" "$DESKTOP_DIR/"
-            chmod +x "$DESKTOP_DIR/$(basename "$desktop_path")"
+            desktop_file="$DESKTOP_DIR/$(basename "$desktop_path")"
+            chmod +x "$desktop_file"
+            case "$(basename "$desktop_path")" in
+                com.bitwarden.desktop|org.chromium.Chromium*.desktop)
+                    sed -i '/^Exec=/ s@ run @ run --no-sandbox @' "$desktop_file"
+                    ;;
+            esac
         fi
     done
 done
