@@ -31,8 +31,15 @@ RUN mkdir -p /etc/apt/keyrings \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
     && apt-get install -y \
-        google-chrome-stable brave-browser opera-stable code \
+        google-chrome-stable brave-browser opera-stable code chromium-browser \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Allow running Chromium-based browsers as root
+RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop chromium-browser.desktop; do \
+        if [ -f "/usr/share/applications/$f" ]; then \
+            sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@' "/usr/share/applications/$f"; \
+        fi; \
+    done
 
 # Setup Flatpak remote only
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
