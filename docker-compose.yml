@@ -1,0 +1,34 @@
+services:
+  webtop:
+    build: .
+    container_name: webtop-kde
+    restart: unless-stopped
+    shm_size: "2gb"
+    ports:
+      - 32768:80
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Asia/Bahrain
+      - TITLE=Ubuntu KDE
+      - PASSWORD=123@Marketing@321
+      - DISPLAY=:1
+      - START_DOCKER=true
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISABLE_ZINK=false
+      - NO_GAMEPAD=true
+      - PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - HOME=/config
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - TERM=xterm
+      - S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
+      - S6_VERBOSITY=1
+      - S6_STAGE2_HOOK=/docker-mods
+      - VIRTUAL_ENV=/lsiopy
+      - PERL5LIB=/usr/local/bin
+      - PULSE_RUNTIME_PATH=/defaults
+      - SELKIES_INTERPOSER=/usr/lib/selkies_joystick_interposer.so
+      - LSIO_FIRST_PARTY=true
+    volumes:
+      - /mnt/docker/mohamed-web/webtop_config:/config
