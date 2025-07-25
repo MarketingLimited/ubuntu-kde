@@ -10,10 +10,16 @@ RUN apt-get update && apt-get install -y \
     openbox tint2 xterm \
     libreoffice vlc gimp inkscape shutter winff kodi plank \
     flatpak gnome-software-plugin-flatpak \
+    flameshot kdeconnect timeshift syncthing syncthing-gtk \
+    krita blender darktable obs-studio calibre \
+    git neofetch btop gnome-tweaks stacer \
+    docker.io docker-compose mysql-workbench dbeaver \
+    nodejs npm python3 python3-pip jupyter-notebook \
+    wire-desktop element-desktop signal-desktop nextcloud-desktop \
     fonts-noto-core fonts-noto-ui-core fonts-noto-color-emoji fonts-noto-extra \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
     supervisor tigervnc-standalone-server tigervnc-common novnc websockify \
-    dbus-x11 x11-xserver-utils xfonts-base \
+    dbus-x11 x11-xserver-utils xfonts-base snapd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
