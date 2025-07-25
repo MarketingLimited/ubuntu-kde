@@ -51,7 +51,7 @@ for app in "${apps[@]}"; do
         cp "/usr/share/applications/$app" "$DESKTOP_DIR/"
         chmod +x "$DESKTOP_DIR/$app"
         case "$app" in
-            google-chrome.desktop|brave-browser.desktop|opera.desktop|code.desktop)
+            google-chrome.desktop|brave-browser.desktop|opera.desktop|code.desktop|element-desktop.desktop|signal-desktop.desktop|wire-desktop.desktop)
                 sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "$DESKTOP_DIR/$app"
                 ;;
         esac

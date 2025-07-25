@@ -41,7 +41,8 @@ Run `./webtop.sh help` to see all available commands.
 ### Root sandbox restrictions
 
 The container runs applications as the `root` user. Electron-based apps like Chrome,
-Chromium, Opera, Brave, VS Code and Bitwarden need the `--no-sandbox` flag when
+Chromium-based browsers, Electron collaboration tools like Element, Signal and Wire,
+and apps such as VS Code and Bitwarden need the `--no-sandbox` flag when
 executed as root. The setup scripts automatically patch their desktop entries so
 they launch correctly inside the container.
 
