@@ -15,10 +15,8 @@ done
 # APT/DEB apps
 apps=(
     "google-chrome.desktop"
-    "firefox.desktop"
     "brave-browser.desktop"
     "opera.desktop"
-    "chromium-browser.desktop"
     "code.desktop"
     "libreoffice-writer.desktop"
     "libreoffice-calc.desktop"
@@ -39,8 +37,8 @@ for app in "${apps[@]}"; do
         cp "/usr/share/applications/$app" "$DESKTOP_DIR/"
         chmod +x "$DESKTOP_DIR/$app"
         case "$app" in
-            google-chrome.desktop|brave-browser.desktop|opera.desktop|chromium-browser.desktop|code.desktop)
-                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@' "$DESKTOP_DIR/$app"
+            google-chrome.desktop|brave-browser.desktop|opera.desktop|code.desktop)
+                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "$DESKTOP_DIR/$app"
                 ;;
         esac
     fi
@@ -55,6 +53,7 @@ flatpak_ids=(
     "com.blackmagicdesign.resolve"
     "com.github.phase1geo.minder"
     "org.chromium.Chromium"
+    "org.mozilla.firefox"
 )
 for fapp in "${flatpak_ids[@]}"; do
     for exportdir in /var/lib/flatpak/exports/share/applications /root/.local/share/flatpak/exports/share/applications; do
