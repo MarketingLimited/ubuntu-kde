@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 apps=(
     "com.bitwarden.desktop"

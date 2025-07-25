@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     fonts-noto-core fonts-noto-ui-core fonts-noto-color-emoji fonts-noto-extra \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
     supervisor tigervnc-standalone-server tigervnc-common novnc websockify \
+    dbus-x11 x11-xserver-utils xfonts-base \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
@@ -45,13 +46,11 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-# VNC xstartup: openbox + tint2, always up
+# VNC xstartup: launch KDE Plasma
 RUN mkdir -p /root/.vnc && \
     echo '#!/bin/sh\n\
 export XKL_XMODMAP_DISABLE=1\n\
-openbox-session &\n\
-tint2 &\n\
-xterm &' > /root/.vnc/xstartup && \
+exec dbus-launch --exit-with-session startplasma-x11' > /root/.vnc/xstartup && \
     chmod +x /root/.vnc/xstartup
 
 # Desktop and Flatpak setup scripts
@@ -63,4 +62,4 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 80 5901
 
-CMD ["/usr/bin/supervisord", "-n"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
