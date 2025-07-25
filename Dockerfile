@@ -35,7 +35,7 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Allow running Chromium-based browsers as root
-RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop chromium-browser.desktop; do \
+RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop chromium-browser.desktop code.desktop; do \
         if [ -f "/usr/share/applications/$f" ]; then \
             sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@' "/usr/share/applications/$f"; \
         fi; \
