@@ -1,11 +1,14 @@
 #!/bin/bash
+set -euo pipefail
 
 DESKTOP_DIR="/root/Desktop"
 mkdir -p "$DESKTOP_DIR"
 
 # Wait for flatpak apps to finish installing
-for i in {1..10}; do
-    flatpak list | grep -q "com.adobe.Reader" && break
+for _ in {1..10}; do
+    if flatpak list | grep -q "com.adobe.Reader"; then
+        break
+    fi
     sleep 5
 done
 

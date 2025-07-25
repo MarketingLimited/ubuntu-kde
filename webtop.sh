@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 APP_NAME="webtop-kde"
 COMPOSE_FILE="docker-compose.yml"
@@ -20,8 +21,16 @@ function stop_container() {
     docker compose -f "$COMPOSE_FILE" down
 }
 
+function show_logs() {
+    docker compose -f "$COMPOSE_FILE" logs -f
+}
+
+function open_shell() {
+    docker compose -f "$COMPOSE_FILE" exec webtop bash
+}
+
 function show_help() {
-    echo "Usage: ./webtop.sh [build|up|down|restart|status|help]"
+    echo "Usage: ./webtop.sh [build|up|down|restart|status|logs|shell|help]"
 }
 
 case "$ACTION" in
@@ -41,6 +50,12 @@ case "$ACTION" in
         ;;
     status)
         docker compose -f "$COMPOSE_FILE" ps
+        ;;
+    logs)
+        show_logs
+        ;;
+    shell)
+        open_shell
         ;;
     help|--help|-h)
         show_help
