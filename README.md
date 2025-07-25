@@ -51,3 +51,21 @@ The Docker image sets the root password to `root` for convenience when
 accessing a shell or VNC session. Change this in the `Dockerfile` if you need a
 different password.
 
+## Pre-installed applications
+
+The image comes with a wide selection of productivity, creative and
+development tools pre-installed so you can get started immediately. Highlights
+include:
+
+- Office suites: LibreOffice, OnlyOffice and WPS Office
+- Web browsers: Google Chrome, Brave, Opera and Firefox
+- Development tools: VS Code, Node.js, npm, Docker, Docker Compose, Git,
+  MySQL Workbench and DBeaver
+- Graphics applications: GIMP, Inkscape, Krita, Blender and Darktable
+- Utilities: Flameshot, KDE Connect, Timeshift, Syncthing, OBS Studio and
+  Calibre
+- Collaboration: Wire, Element, Signal and Nextcloud
+- System tools: GNOME Tweaks, Stacer, Neofetch, Btop and AppImage support
+
+These applications are installed automatically when the container is built.
+
