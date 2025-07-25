@@ -13,9 +13,9 @@ RUN apt-get update && apt-get install -y \
     flameshot kdeconnect timeshift syncthing syncthing-gtk \
     krita blender darktable obs-studio calibre \
     git neofetch btop gnome-tweaks stacer \
-    docker.io docker-compose mysql-workbench dbeaver \
+    docker.io docker-compose \
     nodejs npm python3 python3-pip jupyter-notebook \
-    wire-desktop element-desktop signal-desktop nextcloud-desktop \
+    nextcloud-desktop \
     fonts-noto-core fonts-noto-ui-core fonts-noto-color-emoji fonts-noto-extra \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
     supervisor tigervnc-standalone-server tigervnc-common novnc websockify \
@@ -30,6 +30,26 @@ RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
     && wget -qO- https://deb.opera.com/archive.key | gpg --dearmor > /usr/share/keyrings/opera.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/opera.gpg] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera.list \
     && apt-get update
+
+# Install dbeaver
+RUN wget -O /usr/share/keyrings/dbeaver.gpg.key https://dbeaver.io/debs/dbeaver.gpg.key \
+    && echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg.key] https://dbeaver.io/debs/dbeaver-ce /" > /etc/apt/sources.list.d/dbeaver.list \
+    && apt-get update && apt-get install -y dbeaver-ce && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install wire-desktop
+RUN wget -qO- https://wire-app.wire.com/linux/releases.key | gpg --dearmor > /usr/share/keyrings/wire-desktop.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/wire-desktop.gpg] https://wire-app.wire.com/linux/debian stable main" > /etc/apt/sources.list.d/wire-desktop.list \
+    && apt-get update && apt-get install -y wire-desktop && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install element-desktop
+RUN wget -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.element.io/debian/element-io-archive-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main" > /etc/apt/sources.list.d/element-io.list \
+    && apt-get update && apt-get install -y element-desktop && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install signal-desktop
+RUN wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > /usr/share/keyrings/signal-desktop-keyring.gpg \
+    && echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' > /etc/apt/sources.list.d/signal-xenial.list \
+    && apt-get update && apt-get install -y signal-desktop && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install browsers and editors
 RUN mkdir -p /etc/apt/keyrings \
