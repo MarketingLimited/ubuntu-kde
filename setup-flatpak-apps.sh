@@ -9,6 +9,7 @@ apps=(
     "com.blackmagicdesign.resolve"
     "com.github.phase1geo.minder"
     "org.chromium.Chromium"
+    "org.mozilla.firefox"
 )
 
 for app in "${apps[@]}"; do

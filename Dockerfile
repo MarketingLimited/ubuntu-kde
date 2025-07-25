@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates lsb-release htop net-tools unzip locales \
     kde-plasma-desktop dolphin kate okular konsole \
     openbox tint2 xterm \
-    firefox libreoffice vlc gimp inkscape shutter winff kodi plank \
+    libreoffice vlc gimp inkscape shutter winff kodi plank \
     flatpak gnome-software-plugin-flatpak \
     fonts-noto-core fonts-noto-ui-core fonts-noto-color-emoji fonts-noto-extra \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
@@ -31,13 +31,13 @@ RUN mkdir -p /etc/apt/keyrings \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
     && apt-get install -y \
-        google-chrome-stable brave-browser opera-stable code chromium-browser \
+        google-chrome-stable brave-browser opera-stable code \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Allow running Chromium-based browsers as root
-RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop chromium-browser.desktop code.desktop; do \
+RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop code.desktop; do \
         if [ -f "/usr/share/applications/$f" ]; then \
-            sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@' "/usr/share/applications/$f"; \
+            sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "/usr/share/applications/$f"; \
         fi; \
     done
 
