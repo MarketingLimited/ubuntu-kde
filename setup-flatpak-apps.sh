@@ -8,6 +8,7 @@ apps=(
     "com.simplenote.Simplenote"
     "com.blackmagicdesign.resolve"
     "com.github.phase1geo.minder"
+    "org.chromium.Chromium"
 )
 
 for app in "${apps[@]}"; do

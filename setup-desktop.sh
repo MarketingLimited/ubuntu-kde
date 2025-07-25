@@ -18,6 +18,7 @@ apps=(
     "firefox.desktop"
     "brave-browser.desktop"
     "opera.desktop"
+    "chromium-browser.desktop"
     "code.desktop"
     "libreoffice-writer.desktop"
     "libreoffice-calc.desktop"
@@ -37,6 +38,11 @@ for app in "${apps[@]}"; do
     if [ -f "/usr/share/applications/$app" ]; then
         cp "/usr/share/applications/$app" "$DESKTOP_DIR/"
         chmod +x "$DESKTOP_DIR/$app"
+        case "$app" in
+            google-chrome.desktop|brave-browser.desktop|opera.desktop|chromium-browser.desktop)
+                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@' "$DESKTOP_DIR/$app"
+                ;;
+        esac
     fi
 done
 
@@ -48,6 +54,7 @@ flatpak_ids=(
     "com.simplenote.Simplenote"
     "com.blackmagicdesign.resolve"
     "com.github.phase1geo.minder"
+    "org.chromium.Chromium"
 )
 for fapp in "${flatpak_ids[@]}"; do
     for exportdir in /var/lib/flatpak/exports/share/applications /root/.local/share/flatpak/exports/share/applications; do
