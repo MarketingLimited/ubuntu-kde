@@ -21,6 +21,19 @@ You can validate the configuration with:
 docker compose config
 ```
 
+The container exposes an SSH server on port `22` and a web terminal on port
+`7681`. Map these ports when starting the container. With the included
+`docker-compose.yml` the mappings are:
+
+```yaml
+  - "2222:22"      # SSH
+  - "7681:7681"    # ttyd web terminal
+```
+
+The default credentials for the web terminal are `terminal` / `terminal`. You
+can override them by setting the `TTYD_USER` and `TTYD_PASSWORD` environment
+variables.
+
 If you see warnings from Supervisor about missing configuration, ensure it runs
 with the provided config file. The Dockerfile already launches it with:
 `supervisord -c /etc/supervisor/supervisord.conf -n`.
