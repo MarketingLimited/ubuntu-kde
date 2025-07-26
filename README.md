@@ -62,7 +62,7 @@ is `AdminPassw0rd!`.
 A standard user named `devuser` is available with password `DevPassw0rd!`. Use
 this account for regular logins instead of `root`.
 ### User management inside KDE
-Supervisor launches `dbus-daemon`, `accounts-daemon` and `polkitd` so the **Users** panel in System Settings can list and manage accounts.
+Supervisor launches `dbus-daemon`, `accounts-daemon` and `polkitd` so the **Users** panel in System Settings can list and manage accounts. The VNC session also starts `polkit-kde-authentication-agent-1` so authentication dialogs appear when adding or modifying accounts.
 
 
 ## Pre-installed applications
