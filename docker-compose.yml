@@ -6,6 +6,8 @@ services:
     shm_size: "2gb"
     ports:
       - 32768:80
+      - 2222:22
+      - 7681:7681
     environment:
       - PUID=1000
       - PGID=1000
