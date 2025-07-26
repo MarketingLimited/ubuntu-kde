@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     dbus-x11 x11-xserver-utils xfonts-base snapd \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice \
+    policykit-1 \
     polkit-kde-agent-1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -92,8 +93,7 @@ ENV LC_ALL=en_US.UTF-8
 RUN mkdir -p /root/.vnc && \
     echo '#!/bin/sh\n\
 export XKL_XMODMAP_DISABLE=1\n\
-polkit-kde-authentication-agent-1 &\n\
-# run the Plasma session as devuser instead of root\n\
+# launch KDE Plasma as devuser\n\
 exec su -l devuser -c "dbus-launch --exit-with-session startplasma-x11"' > /root/.vnc/xstartup && \
     chmod +x /root/.vnc/xstartup
 
