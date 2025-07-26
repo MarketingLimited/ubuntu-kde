@@ -48,9 +48,14 @@ they launch correctly inside the container.
 
 ## Default root password
 
-The Docker image sets the root password to `root` for convenience when
-accessing a shell or VNC session. Change this in the `Dockerfile` if you need a
-different password.
+The Docker image sets the root password to `ComplexP@ssw0rd!` for convenience
+when accessing a shell or VNC session. Change this in the `Dockerfile` if you
+need a different password.
+
+## Default user account
+
+A standard user named `devuser` is available with password `DevPassw0rd!`. Use
+this account for regular logins instead of `root`.
 
 ## Pre-installed applications
 
