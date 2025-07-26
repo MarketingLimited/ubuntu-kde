@@ -61,6 +61,9 @@ is `AdminPassw0rd!`.
 
 A standard user named `devuser` is available with password `DevPassw0rd!`. Use
 this account for regular logins instead of `root`.
+### User management inside KDE
+The container runs `accounts-daemon` via Supervisor so the **Users** panel in System Settings can list and manage accounts.
+
 
 ## Pre-installed applications
 
