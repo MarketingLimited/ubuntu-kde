@@ -62,31 +62,7 @@ is `AdminPassw0rd!`.
 A standard user named `devuser` is available with password `DevPassw0rd!`. Use
 this account for regular logins instead of `root`.
 ### User management inside KDE
-Supervisor launches `dbus-daemon`, `accounts-daemon` and `polkitd` so the **Users** panel in System Settings can list and manage accounts. The VNC session also starts `polkit-kde-authentication-agent-1` so authentication dialogs appear when adding or modifying accounts.
-
-## Remote terminal access
-
-Two methods are available for connecting to a shell inside the container:
-
-### SSH
-
-Port **22** is exposed from the container. In `docker-compose.yml` it is mapped to host port **2222** so you can connect using:
-
-```bash
-ssh -p 2222 root@<host-ip>
-```
-
-Use the predefined passwords or your own credentials.
-
-### Browser terminal
-
-A web terminal powered by `ttyd` runs on port **7681**. Access it at:
-
-```
-http://<host-ip>:7681/
-```
-
-The service launches `bash` and uses the same user accounts as SSH.
+Supervisor launches `dbus-daemon`, `accounts-daemon` and `polkitd` so the **Users** panel in System Settings can list and manage accounts.
 
 
 ## Pre-installed applications
