@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice \
     policykit-1 \
-    polkit-kde-agent-1 \
+    polkit-kde-agent-1 openssh-server ttyd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
@@ -112,6 +112,7 @@ RUN echo 'root:ComplexP@ssw0rd!' | chpasswd \
     && useradd -m -s /bin/bash devuser \
     && echo 'devuser:DevPassw0rd!' | chpasswd
 
-EXPOSE 80 5901
+RUN mkdir -p /var/run/sshd
+EXPOSE 22 80 5901 7681
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
