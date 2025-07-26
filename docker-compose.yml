@@ -6,6 +6,8 @@ services:
     shm_size: "2gb"
     ports:
       - 32768:80
+      - 2222:22
+      - 7681:7681
     environment:
       - PUID=1000
       - PGID=1000
@@ -17,6 +19,8 @@ services:
       - NVIDIA_DRIVER_CAPABILITIES=all
       - DISABLE_ZINK=false
       - NO_GAMEPAD=true
+      - TTYD_USER=${TTYD_USER:-terminal}
+      - TTYD_PASSWORD=${TTYD_PASSWORD:-terminal}
       - PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       - HOME=/root
       - LANGUAGE=en_US.UTF-8

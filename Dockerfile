@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     dbus-x11 x11-xserver-utils xfonts-base snapd \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice \
+    openssh-server ttyd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
@@ -87,8 +88,10 @@ RUN locale-gen en_US.UTF-8 ar_EG.UTF-8 \
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
+ENV TTYD_USER=terminal
+ENV TTYD_PASSWORD=terminal
 # VNC xstartup: launch KDE Plasma
-RUN mkdir -p /root/.vnc && \
+RUN mkdir -p /var/run/sshd /root/.vnc && \
     echo '#!/bin/sh\n\
 export XKL_XMODMAP_DISABLE=1\n\
 exec dbus-launch --exit-with-session startplasma-x11' > /root/.vnc/xstartup && \
@@ -109,6 +112,6 @@ RUN echo 'root:ComplexP@ssw0rd!' | chpasswd \
     && useradd -m -s /bin/bash devuser \
     && echo 'devuser:DevPassw0rd!' | chpasswd
 
-EXPOSE 80 5901
+EXPOSE 22 80 5901 7681
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
