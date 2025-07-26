@@ -52,6 +52,11 @@ The Docker image sets the root password to `ComplexP@ssw0rd!` for convenience
 when accessing a shell or VNC session. Change this in the `Dockerfile` if you
 need a different password.
 
+## Administrator account
+
+An additional user named `adminuser` has sudo privileges. The default password
+is `AdminPassw0rd!`.
+
 ## Default user account
 
 A standard user named `devuser` is available with password `DevPassw0rd!`. Use
@@ -72,6 +77,9 @@ include:
   Calibre
 - Collaboration: Wire, Element, Signal and Nextcloud
 - System tools: GNOME Tweaks, Stacer, Neofetch, Btop and AppImage support
+- Virtualization and emulators: Waydroid, Anbox, Wine, Bottles, PlayOnLinux,
+  WinApps for Linux, QEMU (headless), Darling, DOSBox, GNOME Terminal,
+  Konsole, LXTerminal, Terminator and Android Studio (without AVD)
 
 These applications are installed automatically when the container is built.
 

@@ -44,6 +44,9 @@ apps=(
     "gnome-tweaks.desktop"
     "org.kde.konsole.desktop"
     "org.kde.dolphin.desktop"
+    "gnome-terminal.desktop"
+    "lxterminal.desktop"
+    "terminator.desktop"
 )
 
 for app in "${apps[@]}"; do
@@ -74,6 +77,8 @@ flatpak_ids=(
     "com.calibre_ebook.calibre"
     "org.chromium.Chromium"
     "org.mozilla.firefox"
+    "com.usebottles.bottles"
+    "org.phoenicis.playonlinux"
 )
 for fapp in "${flatpak_ids[@]}"; do
     for exportdir in /var/lib/flatpak/exports/share/applications /root/.local/share/flatpak/exports/share/applications; do
