@@ -77,9 +77,14 @@ RUN curl -fsSL https://repo.waydro.id | bash \
 RUN snap install anbox --beta --devmode || true
 
 # Install Darling for macOS compatibility
-RUN echo "deb [signed-by=/usr/share/keyrings/darling.gpg] https://repo.darlinghq.org/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/darling.list \
-    && curl -fsSL https://repo.darlinghq.org/darling.asc | gpg --dearmor -o /usr/share/keyrings/darling.gpg \
-    && apt-get update && apt-get install -y darling && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y cmake automake clang-15 bison flex libfuse-dev libudev-dev pkg-config libc6-dev-i386 \
+    gcc-multilib libcairo2-dev libgl1-mesa-dev curl libglu1-mesa-dev libtiff5-dev \
+    libfreetype6-dev git git-lfs libelf-dev libxml2-dev libegl1-mesa-dev libfontconfig1-dev \
+    libbsd-dev libxrandr-dev libxcursor-dev libgif-dev libavutil-dev libpulse-dev \
+    libavformat-dev libavcodec-dev libswresample-dev libdbus-1-dev libxkbfile-dev \
+    libssl-dev libstdc++-12-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN git clone --recursive https://github.com/darlinghq/darling.git /opt/darling
+RUN cd /opt/darling && mkdir build && cd build && cmake .. && make && make install
 
 # Clone WinApps for Linux
 RUN git clone https://github.com/Fmstrat/winapps.git /opt/winapps
