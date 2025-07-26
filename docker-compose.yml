@@ -7,8 +7,8 @@ services:
     ports:
       - 32768:80
     environment:
-      - PUID=0
-      - PGID=0
+      - PUID=1000
+      - PGID=1000
       - TZ=Asia/Bahrain
       - TITLE=Ubuntu KDE
       - PASSWORD=123@Marketing@321
