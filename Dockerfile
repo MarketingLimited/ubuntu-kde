@@ -22,8 +22,6 @@ RUN apt-get update && apt-get install -y \
     dbus-x11 x11-xserver-utils xfonts-base snapd \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice \
-    policykit-1 \
-    polkit-kde-agent-1 openssh-server ttyd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
@@ -93,8 +91,7 @@ ENV LC_ALL=en_US.UTF-8
 RUN mkdir -p /root/.vnc && \
     echo '#!/bin/sh\n\
 export XKL_XMODMAP_DISABLE=1\n\
-# launch KDE Plasma as devuser\n\
-exec su -l devuser -c "dbus-launch --exit-with-session startplasma-x11"' > /root/.vnc/xstartup && \
+exec dbus-launch --exit-with-session startplasma-x11' > /root/.vnc/xstartup && \
     chmod +x /root/.vnc/xstartup
 
 # Desktop and Flatpak setup scripts
@@ -112,7 +109,6 @@ RUN echo 'root:ComplexP@ssw0rd!' | chpasswd \
     && useradd -m -s /bin/bash devuser \
     && echo 'devuser:DevPassw0rd!' | chpasswd
 
-RUN mkdir -p /var/run/sshd
-EXPOSE 22 80 5901 7681
+EXPOSE 80 5901
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
