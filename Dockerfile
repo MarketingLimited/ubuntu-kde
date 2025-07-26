@@ -20,6 +20,8 @@ RUN apt-get update && apt-get install -y \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
     supervisor tigervnc-standalone-server tigervnc-common novnc websockify \
     dbus-x11 x11-xserver-utils xfonts-base snapd \
+    wine playonlinux qemu-system qemu-utils qemu-kvm \
+    dosbox gnome-terminal lxterminal terminator accountsservice \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
@@ -67,6 +69,24 @@ RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop code.desk
         fi; \
     done
 
+# Install Waydroid repository and package
+RUN curl -fsSL https://repo.waydro.id | bash \
+    && apt-get install -y waydroid && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Optional Anbox support via snap
+RUN snap install anbox --beta --devmode || true
+
+# Install Darling for macOS compatibility
+RUN echo "deb [signed-by=/usr/share/keyrings/darling.gpg] https://repo.darlinghq.org/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/darling.list \
+    && curl -fsSL https://repo.darlinghq.org/darling.asc | gpg --dearmor -o /usr/share/keyrings/darling.gpg \
+    && apt-get update && apt-get install -y darling && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Clone WinApps for Linux
+RUN git clone https://github.com/Fmstrat/winapps.git /opt/winapps
+
+# Install Android Studio without AVD
+RUN snap install android-studio --classic --no-wait || true
+
 # Setup Flatpak remote only
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
@@ -95,6 +115,9 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Set a default root password for interactive logins
 RUN echo 'root:ComplexP@ssw0rd!' | chpasswd \
+    && useradd -m -s /bin/bash adminuser \
+    && echo 'adminuser:AdminPassw0rd!' | chpasswd \
+    && usermod -aG sudo adminuser \
     && useradd -m -s /bin/bash devuser \
     && echo 'devuser:DevPassw0rd!' | chpasswd
 

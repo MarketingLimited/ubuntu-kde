@@ -16,6 +16,8 @@ apps=(
     "com.calibre_ebook.calibre"
     "org.chromium.Chromium"
     "org.mozilla.firefox"
+    "com.usebottles.bottles"
+    "org.phoenicis.playonlinux"
 )
 
 for app in "${apps[@]}"; do
