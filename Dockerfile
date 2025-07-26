@@ -93,7 +93,8 @@ RUN mkdir -p /root/.vnc && \
     echo '#!/bin/sh\n\
 export XKL_XMODMAP_DISABLE=1\n\
 polkit-kde-authentication-agent-1 &\n\
-exec dbus-launch --exit-with-session startplasma-x11' > /root/.vnc/xstartup && \
+# run the Plasma session as devuser instead of root\n\
+exec su -l devuser -c "dbus-launch --exit-with-session startplasma-x11"' > /root/.vnc/xstartup && \
     chmod +x /root/.vnc/xstartup
 
 # Desktop and Flatpak setup scripts
