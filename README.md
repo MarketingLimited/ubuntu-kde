@@ -81,7 +81,7 @@ include:
 - Collaboration: Wire, Element, Signal and Nextcloud
 - System tools: GNOME Tweaks, Stacer, Neofetch, Btop and AppImage support
 - Virtualization and emulators: Waydroid, Anbox, Wine, Bottles, PlayOnLinux,
-  WinApps for Linux, QEMU (headless), Darling, DOSBox, GNOME Terminal,
+  WinApps for Linux, QEMU (headless), DOSBox, GNOME Terminal,
   Konsole, LXTerminal, Terminator and Android Studio (without AVD)
 
 These applications are installed automatically when the container is built.

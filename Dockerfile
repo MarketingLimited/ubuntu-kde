@@ -72,38 +72,21 @@ RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop code.desk
 # Install Waydroid repository and package
 RUN curl -fsSL https://repo.waydro.id | bash \
     && apt-get install -y waydroid && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Optional Anbox support via snap
 RUN snap install anbox --beta --devmode || true
-
-# Install Darling for macOS compatibility
-RUN apt-get update && apt-get install -y cmake automake clang-15 bison flex libfuse-dev libudev-dev pkg-config libc6-dev-i386 \
-    gcc-multilib libcairo2-dev libgl1-mesa-dev curl libglu1-mesa-dev libtiff5-dev \
-    libfreetype6-dev git git-lfs libelf-dev libxml2-dev libegl1-mesa-dev libfontconfig1-dev \
-    libbsd-dev libxrandr-dev libxcursor-dev libgif-dev libavutil-dev libpulse-dev \
-    libavformat-dev libavcodec-dev libswresample-dev libdbus-1-dev libxkbfile-dev \
-    libssl-dev libstdc++-12-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN git clone --recursive https://github.com/darlinghq/darling.git /opt/darling
-RUN cd /opt/darling && mkdir build && cd build && cmake .. && make && make install
-
 # Clone WinApps for Linux
 RUN git clone https://github.com/Fmstrat/winapps.git /opt/winapps
-
 # Install Android Studio without AVD
 RUN snap install android-studio --classic --no-wait || true
-
 # Setup Flatpak remote only
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
 # Locales
 RUN locale-gen en_US.UTF-8 ar_EG.UTF-8 \
     && update-locale LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
     && fc-cache -f -v
-
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
-
 # VNC xstartup: launch KDE Plasma
 RUN mkdir -p /root/.vnc && \
     echo '#!/bin/sh\n\
