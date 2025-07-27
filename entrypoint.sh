@@ -108,6 +108,8 @@ else
 fi
 
 exec env \
+    ENV_DEV_USERNAME="${DEV_USERNAME}" \
+    ENV_DEV_UID="${DEV_UID}" \
     DEV_USERNAME="${DEV_USERNAME}" DEV_UID="${DEV_UID}" \
     XDG_RUNTIME_DIR="/run/user/${DEV_UID}" \
     /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
