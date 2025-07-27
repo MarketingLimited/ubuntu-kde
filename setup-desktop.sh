@@ -98,7 +98,9 @@ done
 
 # Add plank to autostart
 mkdir -p /root/.config/autostart
-cp /usr/share/applications/plank.desktop /root/.config/autostart/
+if [ -f /usr/share/applications/plank.desktop ]; then
+    cp /usr/share/applications/plank.desktop /root/.config/autostart/
+fi
 
 # Set wallpaper (optional)
 WALLPAPER_URL="https://wallpaperaccess.com/full/3314875.jpg"
