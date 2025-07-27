@@ -41,7 +41,12 @@ if ! getent group ssl-cert > /dev/null; then
 fi
 
 if ! id -u "$DEV_USERNAME" > /dev/null 2>&1; then
-    useradd -m -s /bin/bash -u "$DEV_UID" -g "$DEV_GID" "$DEV_USERNAME"
+    if getent passwd "$DEV_UID" > /dev/null; then
+        # Fallback to auto-assigned UID when the desired one already exists
+        useradd -m -s /bin/bash -g "$DEV_GID" "$DEV_USERNAME"
+    else
+        useradd -m -s /bin/bash -u "$DEV_UID" -g "$DEV_GID" "$DEV_USERNAME"
+    fi
 fi
 
 echo "${DEV_USERNAME}:${DEV_PASSWORD}" | chpasswd
