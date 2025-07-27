@@ -53,17 +53,31 @@ Run `./webtop.sh help` to see all available commands.
 
 ### Root sandbox restrictions
 
-The container runs applications as the `root` user. Electron-based apps like Chrome,
-Chromium-based browsers, Electron collaboration tools like Element, Signal and Wire,
-and apps such as VS Code and Bitwarden need the `--no-sandbox` flag when
-executed as root. The setup scripts automatically patch their desktop entries so
-they launch correctly inside the container.
+The desktop session now runs as the `devuser` account by default. Some
+Electron-based apps still require the `--no-sandbox` flag when executed as
+root (for example via `sudo`). The setup scripts automatically patch their
+desktop entries so they launch correctly.
 
 ## Default root password
 
 The Docker image sets the root password to `ComplexP@ssw0rd!` for convenience
-when accessing a shell or VNC session. Change this in the `Dockerfile` if you
-need a different password.
+when accessing a shell or VNC session. You can override this and other account
+credentials at runtime by setting environment variables in
+`docker-compose.yml`:
+
+```yaml
+environment:
+  DEV_USERNAME: devuser
+  DEV_PASSWORD: DevPassw0rd!
+  ADMIN_USERNAME: adminuser
+  ADMIN_PASSWORD: AdminPassw0rd!
+  ROOT_PASSWORD: ComplexP@ssw0rd!
+  DEV_UID: 1000
+  DEV_GID: 1000
+```
+
+These variables control the usernames, passwords and numeric IDs for the
+non-root accounts created by the entrypoint script.
 
 ## Administrator account
 

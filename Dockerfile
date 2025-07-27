@@ -97,6 +97,7 @@ export XKL_XMODMAP_DISABLE=1\n\
 exec dbus-launch --exit-with-session startplasma-x11' > /root/.vnc/xstartup && \
     chmod +x /root/.vnc/xstartup
 
+
 # Desktop and Flatpak setup scripts
 COPY setup-flatpak-apps.sh /usr/local/bin/setup-flatpak-apps.sh
 COPY setup-desktop.sh /usr/local/bin/setup-desktop.sh
@@ -105,12 +106,17 @@ RUN chmod +x /usr/local/bin/setup-flatpak-apps.sh /usr/local/bin/setup-desktop.s
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Set a default root password for interactive logins
-RUN echo 'root:ComplexP@ssw0rd!' | chpasswd \
-    && useradd -m -s /bin/bash adminuser \
-    && echo 'adminuser:AdminPassw0rd!' | chpasswd \
-    && usermod -aG sudo adminuser \
-    && useradd -m -s /bin/bash devuser \
-    && echo 'devuser:DevPassw0rd!' | chpasswd
+RUN echo 'root:ComplexP@ssw0rd!' | chpasswd
+
+
+# Ensure updated accountsservice
+RUN apt-get update && apt-get install -y accountsservice && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 22 80 5901 7681
 
