@@ -15,6 +15,16 @@ if [ -n "$ROOT_PASSWORD" ]; then
     echo "root:${ROOT_PASSWORD}" | chpasswd
 fi
 
+# Ensure polkitd system user and group exist
+getent group polkitd >/dev/null || groupadd -r polkitd
+getent passwd polkitd >/dev/null || useradd -r -g polkitd -s /sbin/nologin polkitd
+
+# Apply required capabilities and permissions for PolicyKit
+if command -v setcap >/dev/null 2>&1; then
+    setcap cap_setgid=pe /usr/lib/polkit-1/polkitd || true
+fi
+chmod 4755 /usr/lib/policykit-1/polkit-agent-helper-1
+
 # Ensure group and user exist
 if ! getent group "$DEV_USERNAME" > /dev/null; then
     groupadd -g "$DEV_GID" "$DEV_USERNAME"

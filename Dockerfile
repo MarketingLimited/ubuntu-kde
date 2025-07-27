@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     dbus-x11 x11-xserver-utils xfonts-base snapd \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice policykit-1 \
-    openssh-server ttyd \
+    openssh-server ttyd libcap2-bin polkit-kde-agent-1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
@@ -112,6 +112,10 @@ RUN echo 'root:ComplexP@ssw0rd!' | chpasswd
 # Ensure updated accountsservice
 RUN apt-get update && apt-get install -y accountsservice policykit-1 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Ensure KDE polkit agent starts correctly
+RUN ln -sf /usr/lib/x86_64-linux-gnu/libexec/polkit-kde-authentication-agent-1 /usr/lib/polkit-kde-authentication-agent-1 && \
+    sed -i 's@^Exec=.*@Exec=/usr/lib/polkit-kde-authentication-agent-1@' /etc/xdg/autostart/polkit-kde-authentication-agent-1.desktop
 
 # Allow the default user to perform privileged actions without authentication
 COPY devuser-all.rules /etc/polkit-1/rules.d/99-devuser-all.rules
