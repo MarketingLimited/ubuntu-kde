@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
     supervisor tigervnc-standalone-server tigervnc-common novnc websockify \
     dbus-x11 x11-xserver-utils xfonts-base snapd \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
-    dosbox gnome-terminal lxterminal terminator accountsservice \
+    dosbox gnome-terminal lxterminal terminator accountsservice policykit-1 \
     openssh-server ttyd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -110,7 +110,7 @@ RUN echo 'root:ComplexP@ssw0rd!' | chpasswd
 
 
 # Ensure updated accountsservice
-RUN apt-get update && apt-get install -y accountsservice && \
+RUN apt-get update && apt-get install -y accountsservice policykit-1 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /entrypoint.sh
