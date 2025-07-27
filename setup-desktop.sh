@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euxo pipefail
 
 DESKTOP_DIR="/root/Desktop"
 mkdir -p "$DESKTOP_DIR"
