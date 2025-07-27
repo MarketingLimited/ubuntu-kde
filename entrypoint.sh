@@ -50,6 +50,9 @@ if ! id -u "$DEV_USERNAME" > /dev/null 2>&1; then
 fi
 
 echo "${DEV_USERNAME}:${DEV_PASSWORD}" | chpasswd
+if ! getent group pulse-access >/dev/null; then
+    groupadd -r pulse-access
+fi
 usermod -aG sudo,ssl-cert,pulse-access,video "$DEV_USERNAME"
 
 # Admin user
