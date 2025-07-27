@@ -111,18 +111,19 @@ else
     fi
 fi
 
-# Fallback: ensure polkitd is running if supervisor fails to start it
-if ! pgrep -x polkitd >/dev/null 2>&1; then
-    for path in \
-        /usr/lib/policykit-1/polkitd \
-        /usr/libexec/policykit-1/polkitd \
-        $(command -v polkitd 2>/dev/null); do
-        if [ -x "$path" ]; then
-            echo "Starting fallback polkitd at $path"
-            "$path" --no-debug &
-            break
-        fi
-    done
+
+# Fix permissions so KDE apps can write files
+chown -R devuser:devuser /home/devuser
+chown -R adminuser:adminuser /home/adminuser
+
+# Fallback: Start polkitd manually if supervisor fails
+if ! pgrep polkitd >/dev/null; then
+  echo "Starting fallback polkitd..."
+  if [ -x /usr/libexec/policykit-1/polkitd ]; then
+    /usr/libexec/policykit-1/polkitd --no-debug &
+  elif [ -x /usr/lib/policykit-1/polkitd ]; then
+    /usr/lib/policykit-1/polkitd --no-debug &
+  fi
 fi
 
 exec env \
