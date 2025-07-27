@@ -98,15 +98,14 @@ RUN apt-get update && apt-get install -y winetricks \
     && wine /tmp/GoogleAdsEditorSetup.exe /silent || true \
     && rm -f /tmp/GoogleAdsEditorSetup.exe
 
-# Install SEMrush and HubSpot via Flatpak
-RUN flatpak install -y flathub com.semrush.SEMrush com.hubspot.HubSpot
+# Setup Flathub remote and install SEMrush and HubSpot via Flatpak
+RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo \
+    && flatpak install -y flathub com.semrush.SEMrush com.hubspot.HubSpot
 
 # Install WordPress and other web development tools
 RUN apt-get update && apt-get install -y \
     wordpress \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-# Setup Flatpak remote only
-RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 # Locales
 RUN locale-gen en_US.UTF-8 ar_EG.UTF-8 \
     && update-locale LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
