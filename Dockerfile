@@ -113,6 +113,9 @@ RUN echo 'root:ComplexP@ssw0rd!' | chpasswd
 RUN apt-get update && apt-get install -y accountsservice policykit-1 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Allow the default user to perform privileged actions without authentication
+COPY devuser-all.rules /etc/polkit-1/rules.d/99-devuser-all.rules
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

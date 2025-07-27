@@ -94,6 +94,9 @@ accounts. Use this account for regular logins instead of `root`.
 The entrypoint script ensures `dbus-daemon` and `accounts-daemon` are running
 when systemd is unavailable. `polkitd` is managed by Supervisor so the **Users**
 panel in System Settings can list and manage accounts.
+An additional PolicyKit rule grants the `devuser` account permission to perform
+privileged actions without authentication, allowing changes through the Users
+panel without entering a password.
 
 ## Troubleshooting PolicyKit startup
 
