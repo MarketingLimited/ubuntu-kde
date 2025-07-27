@@ -1,6 +1,16 @@
 #!/bin/bash
 set -euxo pipefail
 
+# Ensure flatpak is available
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "Flatpak is not installed" >&2
+    exit 1
+fi
+
+# Make sure the Flathub remote exists
+flatpak remote-add --if-not-exists flathub \
+    https://flathub.org/repo/flathub.flatpakrepo
+
 apps=(
     "com.bitwarden.desktop"
     "com.adobe.Reader"
@@ -22,6 +32,9 @@ apps=(
 
 for app in "${apps[@]}"; do
     if ! flatpak info "$app" > /dev/null 2>&1; then
-        flatpak install -y --noninteractive flathub "$app" || true
+        flatpak install -y --noninteractive --or-update flathub "$app" || true
     fi
 done
+
+# Update any already installed Flatpak apps
+flatpak update -y || true
