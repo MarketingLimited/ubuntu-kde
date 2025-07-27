@@ -73,7 +73,16 @@ if [ -f /var/lib/AccountsService/users/${DEV_USERNAME} ]; then
         echo 'SystemAccount=false' >> /var/lib/AccountsService/users/${DEV_USERNAME}
     fi
 fi
-service accounts-daemon restart
+
+# Launch accounts-daemon manually when systemd services are unavailable
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl restart accounts-daemon || true
+else
+    if pgrep -x accounts-daemon >/dev/null 2>&1; then
+        killall accounts-daemon || true
+    fi
+    /usr/lib/accountsservice/accounts-daemon &
+fi
 
 exec sudo -E -u "${DEV_USERNAME}" \
     DEV_USERNAME="${DEV_USERNAME}" DEV_UID="${DEV_UID}" \
