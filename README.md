@@ -158,6 +158,34 @@ cannot access required system resources when the container runs with a
 restricted security profile. Launching the container in **privileged** mode or
 with `--security-opt seccomp=unconfined` usually resolves the issue.
 
+### Running Waydroid inside the container
+
+Waydroid relies on the `binder` and `ashmem` kernel modules. Load them on the
+host before starting the container:
+
+```bash
+sudo modprobe binder_linux
+sudo modprobe ashmem_linux   # optional on newer kernels
+```
+
+Start the container in privileged mode and pass the binder filesystem from the
+host:
+
+```bash
+docker run -d --name webtop-kde \
+  --privileged \
+  -v /dev/binderfs:/dev/binderfs \
+  -p 32768:80 -p 2222:22 -p 7681:7681 \
+  webtop-kde:latest
+```
+
+Inside the container initialize Waydroid once:
+
+```bash
+waydroid init
+waydroid session start
+```
+
 
 ## Pre-installed applications
 
