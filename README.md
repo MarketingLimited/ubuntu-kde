@@ -82,12 +82,14 @@ non-root accounts created by the entrypoint script.
 ## Administrator account
 
 An additional user named `adminuser` has sudo privileges. The default password
-is `AdminPassw0rd!`.
+is `AdminPassw0rd!`. The `devuser` account also belongs to the `sudo` group so
+it can perform administrative tasks.
 
 ## Default user account
 
-A standard user named `devuser` is available with password `DevPassw0rd!`. Use
-this account for regular logins instead of `root`.
+A user named `devuser` is available with password `DevPassw0rd!`. It is part of
+the `sudo` group, so you can perform administrator actions without switching
+accounts. Use this account for regular logins instead of `root`.
 ### User management inside KDE
 The entrypoint script ensures `dbus-daemon` and `accounts-daemon` are running
 when systemd is unavailable. `polkitd` is managed by Supervisor so the **Users**
