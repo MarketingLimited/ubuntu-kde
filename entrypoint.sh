@@ -27,7 +27,12 @@ chmod 4755 /usr/lib/policykit-1/polkit-agent-helper-1
 
 # Ensure group and user exist
 if ! getent group "$DEV_USERNAME" > /dev/null; then
-    groupadd -g "$DEV_GID" "$DEV_USERNAME"
+    if getent group "$DEV_GID" > /dev/null; then
+        # Fallback to auto-assigned GID when the desired one already exists
+        groupadd "$DEV_USERNAME"
+    else
+        groupadd -g "$DEV_GID" "$DEV_USERNAME"
+    fi
 fi
 
 # Ensure the ssl-cert group exists for adding the dev user

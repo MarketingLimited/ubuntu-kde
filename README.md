@@ -79,6 +79,12 @@ environment:
 These variables control the usernames, passwords and numeric IDs for the
 non-root accounts created by the entrypoint script.
 
+If the container fails to start with repeated `groupadd: GID '1000' already
+exists` messages, another group on the system is already using that numeric
+identifier. Adjust `DEV_GID` (and optionally `DEV_UID`) in
+`docker-compose.yml` to unused values so the accounts can be created
+successfully.
+
 ## Administrator account
 
 An additional user named `adminuser` has sudo privileges. The default password
