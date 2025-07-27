@@ -3,6 +3,7 @@ services:
     build: .
     container_name: webtop-kde
     restart: unless-stopped
+    privileged: true
     shm_size: "2gb"
     ports:
       - 32768:80
