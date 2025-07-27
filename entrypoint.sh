@@ -111,6 +111,20 @@ else
     fi
 fi
 
+# Fallback: ensure polkitd is running if supervisor fails to start it
+if ! pgrep -x polkitd >/dev/null 2>&1; then
+    for path in \
+        /usr/lib/policykit-1/polkitd \
+        /usr/libexec/policykit-1/polkitd \
+        $(command -v polkitd 2>/dev/null); do
+        if [ -x "$path" ]; then
+            echo "Starting fallback polkitd at $path"
+            "$path" --no-debug &
+            break
+        fi
+    done
+fi
+
 exec env \
     ENV_DEV_USERNAME="${DEV_USERNAME}" \
     ENV_DEV_UID="${DEV_UID}" \
