@@ -13,7 +13,13 @@ services:
       - PGID=1000
       - TZ=Asia/Bahrain
       - TITLE=Ubuntu KDE
-      - PASSWORD=123@Marketing@321
+      - DEV_USERNAME=${DEV_USERNAME:-devuser}
+      - DEV_PASSWORD=${DEV_PASSWORD:-DevPassw0rd!}
+      - DEV_UID=${DEV_UID:-1000}
+      - DEV_GID=${DEV_GID:-1000}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-adminuser}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-AdminPassw0rd!}
+      - ROOT_PASSWORD=${ROOT_PASSWORD:-ComplexP@ssw0rd!}
       - DISPLAY=:1
       - START_DOCKER=true
       - NVIDIA_DRIVER_CAPABILITIES=all
