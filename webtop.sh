@@ -12,6 +12,11 @@ function build_container() {
 
 function start_container() {
     echo "🚀 Starting $APP_NAME..."
+    if ! grep -q "^\s*privileged:\s*true" "$COMPOSE_FILE"; then
+        echo "⚠️  $COMPOSE_FILE does not enable privileged mode."
+        echo "   PolicyKit and other desktop components may fail to start."
+        echo "   Add 'privileged: true' or run with '--security-opt seccomp=unconfined'."
+    fi
     docker compose -f "$COMPOSE_FILE" up -d
     docker compose -f "$COMPOSE_FILE" ps
 }
