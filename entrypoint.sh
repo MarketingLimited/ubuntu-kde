@@ -123,6 +123,8 @@ if ! pgrep polkitd >/dev/null; then
     /usr/libexec/policykit-1/polkitd --no-debug &
   elif [ -x /usr/lib/policykit-1/polkitd ]; then
     /usr/lib/policykit-1/polkitd --no-debug &
+  elif [ -x /usr/lib/polkit-1/polkitd ]; then
+    /usr/lib/polkit-1/polkitd --no-debug &
   fi
 fi
 

@@ -22,6 +22,6 @@ apps=(
 
 for app in "${apps[@]}"; do
     if ! flatpak info "$app" > /dev/null 2>&1; then
-        flatpak install -y --noninteractive flathub "$app"
+        flatpak install -y --noninteractive flathub "$app" || true
     fi
 done
