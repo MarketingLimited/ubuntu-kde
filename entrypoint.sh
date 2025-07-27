@@ -139,6 +139,16 @@ fi
 chown -R devuser:devuser /home/devuser
 chown -R adminuser:adminuser /home/adminuser
 
+# Ensure binder/ashmem are available for Waydroid
+if command -v modprobe >/dev/null 2>&1; then
+    modprobe binder_linux || true
+    modprobe ashmem_linux || true
+fi
+mkdir -p /dev/binderfs
+if ! mountpoint -q /dev/binderfs; then
+    mount -t binder binder /dev/binderfs 2>/dev/null || true
+fi
+
 # Fallback: Start polkitd manually if supervisor fails
 if ! pgrep polkitd >/dev/null; then
   echo "Starting fallback polkitd..."
