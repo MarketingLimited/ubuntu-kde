@@ -53,10 +53,12 @@ Run `./webtop.sh help` to see all available commands.
 
 ### Root sandbox restrictions
 
-The desktop session now runs as the `devuser` account by default. Some
+The desktop session now runs as the `adminuser` account by default. Some
 Electron-based apps still require the `--no-sandbox` flag when executed as
 root (for example via `sudo`). The setup scripts automatically patch their
-desktop entries so they launch correctly.
+desktop entries so they launch correctly. Set the `DEV_USERNAME` environment
+variable if you want the session to run as a different account (for example
+`devuser`).
 
 ## Default root password
 
@@ -67,8 +69,8 @@ credentials at runtime by setting environment variables in
 
 ```yaml
 environment:
-  DEV_USERNAME: devuser
-  DEV_PASSWORD: DevPassw0rd!
+  DEV_USERNAME: adminuser
+  DEV_PASSWORD: AdminPassw0rd!
   ADMIN_USERNAME: adminuser
   ADMIN_PASSWORD: AdminPassw0rd!
   ROOT_PASSWORD: ComplexP@ssw0rd!
@@ -79,15 +81,22 @@ environment:
 These variables control the usernames, passwords and numeric IDs for the
 non-root accounts created by the entrypoint script.
 
+To run the desktop session as a separate standard user instead of the
+administrator, set `DEV_USERNAME` (and optionally `DEV_PASSWORD`) to
+`devuser` before starting the container. When `DEV_USERNAME` matches
+`ADMIN_USERNAME`, only a single `adminuser` account will be created and used for
+the VNC session; otherwise both accounts will exist.
+
 ## Administrator account
 
-An additional user named `adminuser` has sudo privileges. The default password
-is `AdminPassw0rd!`.
+The default login is the `adminuser` account, which has sudo privileges. The
+default password is `AdminPassw0rd!`.
 
-## Default user account
+## Standard user account
 
-A standard user named `devuser` is available with password `DevPassw0rd!`. Use
-this account for regular logins instead of `root`.
+An additional user named `devuser` is available with password `DevPassw0rd!`.
+Use this account for regular logins instead of `root` if you don't want to use
+`adminuser`.
 ### User management inside KDE
 The entrypoint script ensures `dbus-daemon` and `accounts-daemon` are running
 when systemd is unavailable. `polkitd` is managed by Supervisor so the **Users**
