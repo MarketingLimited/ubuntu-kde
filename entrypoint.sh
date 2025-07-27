@@ -13,6 +13,11 @@ ROOT_PASSWORD=${ROOT_PASSWORD:-ComplexP@ssw0rd!}
 # Update root password if provided
 if [ -n "$ROOT_PASSWORD" ]; then
     echo "root:${ROOT_PASSWORD}" | chpasswd
+else
+    # Generate a random password for root if not provided
+    RANDOM_PASSWORD=$(openssl rand -base64 12)
+    echo "root:${RANDOM_PASSWORD}" | chpasswd
+    echo "Root password set to: ${RANDOM_PASSWORD}"
 fi
 
 # Ensure polkitd system user and group exist
