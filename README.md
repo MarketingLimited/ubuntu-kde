@@ -16,6 +16,11 @@ Run the container using `docker compose`:
 ```bash
 docker compose up -d
 ```
+The container must run with elevated privileges so PolicyKit and other
+components can start correctly. The provided `docker-compose.yml` already
+includes `privileged: true`. If you run the image manually, add either
+`--privileged` or `--security-opt seccomp=unconfined` to your `docker run`
+command.
 You can validate the configuration with:
 ```bash
 docker compose config
@@ -50,6 +55,10 @@ The repository provides `webtop.sh` for common container operations:
 ```
 
 Run `./webtop.sh help` to see all available commands.
+
+`webtop.sh` checks that `docker-compose.yml` enables privileged mode and warns
+if it does not. Running without privileges can prevent PolicyKit and other
+services from starting correctly.
 
 ### Root sandbox restrictions
 
