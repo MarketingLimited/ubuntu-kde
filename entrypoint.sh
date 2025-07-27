@@ -89,16 +89,25 @@ else
     if pgrep -x accounts-daemon >/dev/null 2>&1; then
         killall accounts-daemon || true
     fi
-    if [ -x /usr/lib/accountsservice/accounts-daemon ]; then
-        /usr/lib/accountsservice/accounts-daemon &
-    elif command -v accounts-daemon >/dev/null 2>&1; then
-        accounts-daemon &
-    else
+    started=false
+    for path in \
+        /usr/lib/accountsservice/accounts-daemon \
+        /usr/sbin/accounts-daemon \
+        /usr/libexec/accounts-daemon \
+        $(command -v accounts-daemon 2>/dev/null); do
+        if [ -x "$path" ]; then
+            echo "Starting accounts-daemon at $path"
+            "$path" &
+            started=true
+            break
+        fi
+    done
+    if [ "$started" = false ]; then
         echo "accounts-daemon not available; skipping"
     fi
 fi
 
-exec sudo -E -u "${DEV_USERNAME}" \
+exec env \
     DEV_USERNAME="${DEV_USERNAME}" DEV_UID="${DEV_UID}" \
     XDG_RUNTIME_DIR="/run/user/${DEV_UID}" \
     /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
