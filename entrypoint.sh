@@ -20,6 +20,11 @@ if ! getent group "$DEV_USERNAME" > /dev/null; then
     groupadd -g "$DEV_GID" "$DEV_USERNAME"
 fi
 
+# Ensure the ssl-cert group exists for adding the dev user
+if ! getent group ssl-cert > /dev/null; then
+    groupadd ssl-cert
+fi
+
 if ! id -u "$DEV_USERNAME" > /dev/null 2>&1; then
     useradd -m -s /bin/bash -u "$DEV_UID" -g "$DEV_GID" "$DEV_USERNAME"
 fi
