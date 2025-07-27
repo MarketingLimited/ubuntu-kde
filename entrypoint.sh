@@ -39,6 +39,7 @@ fi
 
 echo "${ADMIN_USERNAME}:${ADMIN_PASSWORD}" | chpasswd
 usermod -aG sudo "$ADMIN_USERNAME"
+ADMIN_UID=$(id -u "$ADMIN_USERNAME")
 
 sed -i 's/^%sudo.*/%sudo ALL=(ALL) NOPASSWD:ALL/' /etc/sudoers
 
@@ -133,7 +134,7 @@ if ! pgrep polkitd >/dev/null; then
 fi
 
 exec env \
-    ENV_DEV_USERNAME="${DEV_USERNAME}" \
-    ENV_DEV_UID="${DEV_UID}" \
-    DEV_USERNAME="${DEV_USERNAME}" DEV_UID="${DEV_UID}" \
+    ENV_ADMIN_USERNAME="${ADMIN_USERNAME}" \
+    ENV_ADMIN_UID="${ADMIN_UID}" \
+    ADMIN_USERNAME="${ADMIN_USERNAME}" ADMIN_UID="${ADMIN_UID}" \
     /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
