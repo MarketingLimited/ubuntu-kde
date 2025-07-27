@@ -14,8 +14,9 @@ services:
       - PGID=1000
       - TZ=Asia/Bahrain
       - TITLE=Ubuntu KDE
-      - DEV_USERNAME=${DEV_USERNAME:-devuser}
-      - DEV_PASSWORD=${DEV_PASSWORD:-DevPassw0rd!}
+      # The desktop session runs as this account by default
+      - DEV_USERNAME=${DEV_USERNAME:-adminuser}
+      - DEV_PASSWORD=${DEV_PASSWORD:-AdminPassw0rd!}
       - DEV_UID=${DEV_UID:-1000}
       - DEV_GID=${DEV_GID:-1000}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-adminuser}

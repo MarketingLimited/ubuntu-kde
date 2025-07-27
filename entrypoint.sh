@@ -2,8 +2,8 @@
 set -e
 
 # Default credentials and IDs can be overridden via environment variables
-DEV_USERNAME=${DEV_USERNAME:-devuser}
-DEV_PASSWORD=${DEV_PASSWORD:-DevPassw0rd!}
+DEV_USERNAME=${DEV_USERNAME:-adminuser}
+DEV_PASSWORD=${DEV_PASSWORD:-AdminPassw0rd!}
 DEV_UID=${DEV_UID:-1000}
 DEV_GID=${DEV_GID:-1000}
 ADMIN_USERNAME=${ADMIN_USERNAME:-adminuser}
@@ -113,8 +113,12 @@ fi
 
 
 # Fix permissions so KDE apps can write files
-chown -R devuser:devuser /home/devuser
-chown -R adminuser:adminuser /home/adminuser
+if [ -d "/home/${DEV_USERNAME}" ]; then
+  chown -R "${DEV_USERNAME}":"${DEV_USERNAME}" "/home/${DEV_USERNAME}"
+fi
+if [ -d "/home/${ADMIN_USERNAME}" ]; then
+  chown -R "${ADMIN_USERNAME}":"${ADMIN_USERNAME}" "/home/${ADMIN_USERNAME}"
+fi
 
 # Fallback: Start polkitd manually if supervisor fails
 if ! pgrep polkitd >/dev/null; then
