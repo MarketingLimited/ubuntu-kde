@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     krita blender darktable obs-studio calibre \
     git neofetch btop gnome-tweaks stacer \
     docker.io docker-compose \
-    nodejs npm python3 python3-pip jupyter-notebook \
+    python3 python3-pip jupyter-notebook \
     nextcloud-desktop \
     fonts-noto-core fonts-noto-ui-core fonts-noto-color-emoji fonts-noto-extra \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
@@ -33,6 +33,11 @@ RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
     && wget -qO- https://deb.opera.com/archive.key | gpg --dearmor > /usr/share/keyrings/opera.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/opera.gpg] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera.list \
     && apt-get update
+
+# Install Node.js 20 from NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install dbeaver
 RUN wget -O /usr/share/keyrings/dbeaver.gpg.key https://dbeaver.io/debs/dbeaver.gpg.key \
@@ -76,7 +81,7 @@ RUN curl -fsSL https://repo.waydro.id | bash \
 # Optional Anbox support via snap
 RUN snap install anbox --beta --devmode || true
 # Clone WinApps for Linux
-RUN git clone https://github.com/Fmstrat/winapps.git /opt/winapps
+RUN git clone --depth 1 https://github.com/Fmstrat/winapps.git /opt/winapps
 # Install Android Studio without AVD
 RUN snap install android-studio --classic --no-wait || true
 # Setup Flatpak remote only
