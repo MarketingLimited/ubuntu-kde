@@ -75,7 +75,7 @@ if [ -f /var/lib/AccountsService/users/${DEV_USERNAME} ]; then
 fi
 
 # Launch accounts-daemon manually when systemd services are unavailable
-if command -v systemctl >/dev/null 2>&1; then
+if command -v systemctl >/dev/null 2>&1 && [ "$(ps -p 1 -o comm=)" = systemd ]; then
     systemctl restart accounts-daemon || true
 else
     if pgrep -x accounts-daemon >/dev/null 2>&1; then
