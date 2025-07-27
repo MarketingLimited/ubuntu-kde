@@ -93,6 +93,29 @@ The entrypoint script ensures `dbus-daemon` and `accounts-daemon` are running
 when systemd is unavailable. `polkitd` is managed by Supervisor so the **Users**
 panel in System Settings can list and manage accounts.
 
+## Troubleshooting PolicyKit startup
+
+In some environments the `polkitd` binary lives under `/usr/libexec` instead of
+`/usr/lib`. Earlier versions of the container hard-coded the path in
+`supervisord.conf`, which prevented the daemon from starting when the binary was
+elsewhere. The supervisor configuration now launches `polkitd` via the shell and
+checks both locations. `entrypoint.sh` also includes a fallback that spawns
+`polkitd` manually if no running process is detected.
+
+To confirm it is running inside the container:
+
+```bash
+docker compose exec webtop pgrep -a polkitd
+```
+
+If nothing is printed, start the daemon manually using one of:
+
+```bash
+/usr/lib/policykit-1/polkitd --no-debug &
+# or
+/usr/libexec/policykit-1/polkitd --no-debug &
+```
+
 
 ## Pre-installed applications
 
