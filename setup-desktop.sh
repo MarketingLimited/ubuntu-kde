@@ -2,15 +2,17 @@
 set -euxo pipefail
 
 DESKTOP_DIR="/root/Desktop"
-mkdir -p "$DESKTOP_DIR"
+mkdir -p "${DESKTOP_DIR}"
 
-# Wait for flatpak apps to finish installing
-for _ in {1..10}; do
-    if flatpak list | grep -q "com.adobe.Reader"; then
-        break
-    fi
-    sleep 5
-done
+# Wait for flatpak apps to finish installing if flatpak is available
+if command -v flatpak >/dev/null 2>&1; then
+    for _ in {1..10}; do
+        if flatpak list | grep -q "com.adobe.Reader"; then
+            break
+        fi
+        sleep 5
+    done
+fi
 
 # APT/DEB apps
 apps=(
@@ -50,12 +52,14 @@ apps=(
 )
 
 for app in "${apps[@]}"; do
-    if [ -f "/usr/share/applications/$app" ]; then
-        cp "/usr/share/applications/$app" "$DESKTOP_DIR/"
-        chmod +x "$DESKTOP_DIR/$app"
-        case "$app" in
+    if [[ -f "/usr/share/applications/${app}" ]]; then
+        cp "/usr/share/applications/${app}" "${DESKTOP_DIR}/"
+        chmod +x "${DESKTOP_DIR}/${app}"
+        case "${app}" in
             google-chrome.desktop|brave-browser.desktop|opera.desktop|code.desktop|element-desktop.desktop|signal-desktop.desktop|wire-desktop.desktop)
-                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "$DESKTOP_DIR/$app"
+                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "${DESKTOP_DIR}/${app}"
+                ;;
+            *)
                 ;;
         esac
     fi
@@ -81,15 +85,18 @@ flatpak_ids=(
     "org.phoenicis.playonlinux"
 )
 for fapp in "${flatpak_ids[@]}"; do
-    for exportdir in /var/lib/flatpak/exports/share/applications /root/.local/share/flatpak/exports/share/applications; do
-        desktop_path=$(find "$exportdir" -maxdepth 1 -name "$fapp*.desktop" 2>/dev/null | head -n1)
-        if [ -n "$desktop_path" ]; then
-            cp "$desktop_path" "$DESKTOP_DIR/"
-            desktop_file="$DESKTOP_DIR/$(basename "$desktop_path")"
-            chmod +x "$desktop_file"
-            case "$(basename "$desktop_path")" in
+    for exportdir in /var/lib/flatpak/exports/share/applications \
+        /root/.local/share/flatpak/exports/share/applications; do
+        desktop_path=$(find "${exportdir}" -maxdepth 1 -name "${fapp}*.desktop" 2>/dev/null | head -n1)
+        if [[ -n "${desktop_path}" ]]; then
+            cp "${desktop_path}" "${DESKTOP_DIR}/"
+            desktop_file="${DESKTOP_DIR}/$(basename "${desktop_path}")"
+            chmod +x "${desktop_file}"
+            case "$(basename "${desktop_path}")" in
                 com.bitwarden.desktop|org.chromium.Chromium*.desktop)
-                    sed -i '/^Exec=/ s@ run @ run --no-sandbox @' "$desktop_file"
+                    sed -i '/^Exec=/ s@ run @ run --no-sandbox @' "${desktop_file}"
+                    ;;
+                *)
                     ;;
             esac
         fi
@@ -98,12 +105,12 @@ done
 
 # Add plank to autostart
 mkdir -p /root/.config/autostart
-if [ -f /usr/share/applications/plank.desktop ]; then
+if [[ -f /usr/share/applications/plank.desktop ]]; then
     cp /usr/share/applications/plank.desktop /root/.config/autostart/
 fi
 
 # Set wallpaper (optional)
 WALLPAPER_URL="https://wallpaperaccess.com/full/3314875.jpg"
-wget -O /usr/share/backgrounds/kde-custom-wallpaper.jpg "$WALLPAPER_URL" || true
+wget -O /usr/share/backgrounds/kde-custom-wallpaper.jpg "${WALLPAPER_URL}" || true
 
-chmod -R +x "$DESKTOP_DIR"
+chmod -R +x "${DESKTOP_DIR}"
