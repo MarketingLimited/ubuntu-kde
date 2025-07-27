@@ -139,6 +139,14 @@ services:
 Alternatively specify `--security-opt seccomp=unconfined` when running the
 container.
 
+### VNC server fails to start
+
+If `Xvnc` quickly enters a *FATAL* state or you cannot connect over VNC, check
+the container logs using `docker compose logs webtop`. The server sometimes
+cannot access required system resources when the container runs with a
+restricted security profile. Launching the container in **privileged** mode or
+with `--security-opt seccomp=unconfined` usually resolves the issue.
+
 
 ## Pre-installed applications
 
