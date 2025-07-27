@@ -34,8 +34,8 @@ RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/opera.gpg] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera.list \
     && apt-get update
 
-# Install Node.js 20 from NodeSource
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+# Install Node.js 22 from NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -56,7 +56,7 @@ RUN wget -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.
 
 # Install signal-desktop
 RUN wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > /usr/share/keyrings/signal-desktop-keyring.gpg \
-    && echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' > /etc/apt/sources.list.d/signal-xenial.list \
+    && echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt stable main' > /etc/apt/sources.list.d/signal-stable.list \
     && apt-get update && apt-get install -y signal-desktop && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install browsers and editors
@@ -84,6 +84,20 @@ RUN snap install anbox --beta --devmode || true
 RUN git clone --depth 1 https://github.com/Fmstrat/winapps.git /opt/winapps
 # Install Android Studio without AVD
 RUN snap install android-studio --classic --no-wait || true
+
+# Install Marketing and Web Development Tools
+RUN apt-get update && apt-get install -y \
+    figma-linux \
+    google-ads-editor \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install SEMrush and HubSpot via Flatpak
+RUN flatpak install -y flathub com.semrush.SEMrush com.hubspot.HubSpot
+
+# Install WordPress and other web development tools
+RUN apt-get update && apt-get install -y \
+    wordpress \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 # Setup Flatpak remote only
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 # Locales
@@ -110,8 +124,6 @@ RUN chmod +x /usr/local/bin/setup-flatpak-apps.sh /usr/local/bin/setup-desktop.s
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Set a default root password for interactive logins
-RUN echo 'root:ComplexP@ssw0rd!' | chpasswd
 
 
 # Ensure updated accountsservice
