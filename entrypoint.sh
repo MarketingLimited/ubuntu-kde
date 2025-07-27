@@ -63,11 +63,19 @@ export XDG_RUNTIME_DIR=/run/user/${DEV_UID}
 # Ensure the system D-Bus is available before using dbus-send
 if [ ! -S /run/dbus/system_bus_socket ]; then
     mkdir -p /run/dbus
-    dbus-daemon --system --fork
+    if command -v dbus-daemon >/dev/null 2>&1; then
+        dbus-daemon --system --fork || true
+    else
+        echo "dbus-daemon not found; skipping system bus start"
+    fi
 fi
 
-dbus-send --system --dest=org.freedesktop.Accounts --type=method_call \
-  /org/freedesktop/Accounts org.freedesktop.Accounts.CacheUser string:"${DEV_USERNAME}"
+if command -v dbus-send >/dev/null 2>&1; then
+    dbus-send --system --dest=org.freedesktop.Accounts --type=method_call \
+      /org/freedesktop/Accounts org.freedesktop.Accounts.CacheUser string:"${DEV_USERNAME}" || true
+else
+    echo "dbus-send not found; skipping AccountsService registration"
+fi
 if [ -f /var/lib/AccountsService/users/${DEV_USERNAME} ]; then
     if ! grep -q '^SystemAccount=false' /var/lib/AccountsService/users/${DEV_USERNAME}; then
         echo 'SystemAccount=false' >> /var/lib/AccountsService/users/${DEV_USERNAME}
@@ -81,7 +89,13 @@ else
     if pgrep -x accounts-daemon >/dev/null 2>&1; then
         killall accounts-daemon || true
     fi
-    /usr/lib/accountsservice/accounts-daemon &
+    if [ -x /usr/lib/accountsservice/accounts-daemon ]; then
+        /usr/lib/accountsservice/accounts-daemon &
+    elif command -v accounts-daemon >/dev/null 2>&1; then
+        accounts-daemon &
+    else
+        echo "accounts-daemon not available; skipping"
+    fi
 fi
 
 exec sudo -E -u "${DEV_USERNAME}" \
