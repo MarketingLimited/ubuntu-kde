@@ -60,6 +60,12 @@ export XDG_RUNTIME_DIR=/run/user/${DEV_UID}
 
 # Register user with AccountsService
 
+# Ensure the system D-Bus is available before using dbus-send
+if [ ! -S /run/dbus/system_bus_socket ]; then
+    mkdir -p /run/dbus
+    dbus-daemon --system --fork
+fi
+
 dbus-send --system --dest=org.freedesktop.Accounts --type=method_call \
   /org/freedesktop/Accounts org.freedesktop.Accounts.CacheUser string:"${DEV_USERNAME}"
 if [ -f /var/lib/AccountsService/users/${DEV_USERNAME} ]; then
