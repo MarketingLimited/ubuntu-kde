@@ -116,6 +116,20 @@ If nothing is printed, start the daemon manually using one of:
 /usr/libexec/policykit-1/polkitd --no-debug &
 ```
 
+If `polkitd` repeatedly fails to start with messages like `Operation not
+permitted`, your container may be running without enough privileges. In that
+case start it in **privileged** mode or disable the default seccomp profile so
+PolicyKit can initialize correctly. When using Docker Compose add:
+
+```yaml
+services:
+  webtop:
+    privileged: true
+```
+
+Alternatively specify `--security-opt seccomp=unconfined` when running the
+container.
+
 
 ## Pre-installed applications
 
