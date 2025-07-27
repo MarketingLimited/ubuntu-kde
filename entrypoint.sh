@@ -43,20 +43,20 @@ usermod -aG sudo "$ADMIN_USERNAME"
 sed -i 's/^%sudo.*/%sudo ALL=(ALL) NOPASSWD:ALL/' /etc/sudoers
 
 # Prepare VNC startup script for dev user
-mkdir -p /home/${DEV_USERNAME}/.vnc
-cat <<'XEOF' > /home/${DEV_USERNAME}/.vnc/xstartup
+mkdir -p "/home/${DEV_USERNAME}/.vnc"
+cat <<'XEOF' > "/home/${DEV_USERNAME}/.vnc/xstartup"
 #!/bin/sh
 export XKL_XMODMAP_DISABLE=1
 exec dbus-launch --exit-with-session startplasma-x11
 XEOF
-chown -R ${DEV_USERNAME}:${DEV_USERNAME} /home/${DEV_USERNAME}/.vnc
-chmod +x /home/${DEV_USERNAME}/.vnc/xstartup
+chown -R "${DEV_USERNAME}":"${DEV_USERNAME}" "/home/${DEV_USERNAME}/.vnc"
+chmod +x "/home/${DEV_USERNAME}/.vnc/xstartup"
 
 # XDG runtime directory
-mkdir -p /run/user/${DEV_UID}
-chown ${DEV_USERNAME}:${DEV_USERNAME} /run/user/${DEV_UID}
-chmod 700 /run/user/${DEV_UID}
-export XDG_RUNTIME_DIR=/run/user/${DEV_UID}
+mkdir -p "/run/user/${DEV_UID}"
+chown "${DEV_USERNAME}":"${DEV_USERNAME}" "/run/user/${DEV_UID}"
+chmod 700 "/run/user/${DEV_UID}"
+export XDG_RUNTIME_DIR="/run/user/${DEV_UID}"
 
 # Register user with AccountsService
 
@@ -65,6 +65,10 @@ if [ ! -S /run/dbus/system_bus_socket ]; then
     mkdir -p /run/dbus
     if command -v dbus-daemon >/dev/null 2>&1; then
         dbus-daemon --system --fork || true
+        for _ in {1..10}; do
+            [ -S /run/dbus/system_bus_socket ] && break
+            sleep 0.5
+        done
     else
         echo "dbus-daemon not found; skipping system bus start"
     fi
@@ -76,9 +80,9 @@ if command -v dbus-send >/dev/null 2>&1; then
 else
     echo "dbus-send not found; skipping AccountsService registration"
 fi
-if [ -f /var/lib/AccountsService/users/${DEV_USERNAME} ]; then
-    if ! grep -q '^SystemAccount=false' /var/lib/AccountsService/users/${DEV_USERNAME}; then
-        echo 'SystemAccount=false' >> /var/lib/AccountsService/users/${DEV_USERNAME}
+if [ -f "/var/lib/AccountsService/users/${DEV_USERNAME}" ]; then
+    if ! grep -q '^SystemAccount=false' "/var/lib/AccountsService/users/${DEV_USERNAME}"; then
+        echo 'SystemAccount=false' >> "/var/lib/AccountsService/users/${DEV_USERNAME}"
     fi
 fi
 
@@ -111,5 +115,6 @@ exec env \
     ENV_DEV_USERNAME="${DEV_USERNAME}" \
     ENV_DEV_UID="${DEV_UID}" \
     DEV_USERNAME="${DEV_USERNAME}" DEV_UID="${DEV_UID}" \
+    HOME="/home/${DEV_USERNAME}" \
     XDG_RUNTIME_DIR="/run/user/${DEV_UID}" \
     /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
