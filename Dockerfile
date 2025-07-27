@@ -85,11 +85,18 @@ RUN git clone --depth 1 https://github.com/Fmstrat/winapps.git /opt/winapps
 # Install Android Studio without AVD
 RUN snap install android-studio --classic --no-wait || true
 
-# Install Marketing and Web Development Tools
-RUN apt-get update && apt-get install -y \
-    figma-linux \
-    google-ads-editor \
+# Install Figma from PPA
+RUN add-apt-repository -y ppa:chrdevs/figma \
+    && apt-get update \
+    && apt-get install -y figma-linux \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Google Ads Editor using Wine
+RUN apt-get update && apt-get install -y winetricks \
+    && wget -qO /tmp/GoogleAdsEditorSetup.exe https://dl.google.com/adwords_editor/GoogleAdsEditorSetup.exe \
+    && winetricks -q win7 || true \
+    && wine /tmp/GoogleAdsEditorSetup.exe /silent || true \
+    && rm -f /tmp/GoogleAdsEditorSetup.exe
 
 # Install SEMrush and HubSpot via Flatpak
 RUN flatpak install -y flathub com.semrush.SEMrush com.hubspot.HubSpot
