@@ -55,7 +55,11 @@ apps=(
 for app in "${apps[@]}"; do
     desktop_path=""
     for search_dir in /usr/share/applications /var/lib/snapd/desktop/applications; do
-        candidate=$(find "$search_dir" -maxdepth 1 -name "${app}*" -print -quit 2>/dev/null)
+        if [ -d "$search_dir" ]; then
+            candidate=$(find "$search_dir" -maxdepth 1 -name "${app}*" -print -quit 2>/dev/null || true)
+        else
+            candidate=""
+        fi
         if [[ -n "$candidate" ]]; then
             desktop_path="$candidate"
             break
@@ -97,7 +101,11 @@ flatpak_ids=(
 for fapp in "${flatpak_ids[@]}"; do
     for exportdir in /var/lib/flatpak/exports/share/applications \
         /home/${DEV_USERNAME}/.local/share/flatpak/exports/share/applications; do
-        desktop_path=$(find "${exportdir}" -maxdepth 1 -name "${fapp}*.desktop" 2>/dev/null | head -n1)
+        if [ -d "${exportdir}" ]; then
+            desktop_path=$(find "${exportdir}" -maxdepth 1 -name "${fapp}*.desktop" 2>/dev/null | head -n1 || true)
+        else
+            desktop_path=""
+        fi
         if [[ -n "${desktop_path}" ]]; then
             cp "${desktop_path}" "${DESKTOP_DIR}/"
             desktop_file="${DESKTOP_DIR}/$(basename "${desktop_path}")"

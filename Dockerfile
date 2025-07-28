@@ -137,6 +137,9 @@ COPY setup-desktop.sh /usr/local/bin/setup-desktop.sh
 RUN chmod +x /usr/local/bin/setup-flatpak-apps.sh /usr/local/bin/setup-desktop.sh
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Silence D-Bus warnings about missing 'whoopsie' user
+RUN adduser --system --group --no-create-home whoopsie || true
+
 
 
 
