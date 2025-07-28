@@ -26,8 +26,8 @@ else
 fi
 
 # Ensure polkitd system user and group exist
-getent group polkitd >/dev/null || groupadd -r polkitd
-getent passwd polkitd >/dev/null || useradd -r -g polkitd -s /sbin/nologin polkitd
+getent group polkitd >/dev/null || groupadd -r -g 102 polkitd
+getent passwd polkitd >/dev/null || useradd -r -u 102 -g polkitd -s /sbin/nologin polkitd
 
 # Apply required capabilities and permissions for PolicyKit
 if command -v setcap >/dev/null 2>&1; then
@@ -97,6 +97,7 @@ export XDG_RUNTIME_DIR="/run/user/${DEV_UID}"
 # Ensure the system D-Bus is available before using dbus-send
 if [ ! -S /run/dbus/system_bus_socket ]; then
     mkdir -p /run/dbus
+    chown messagebus:messagebus /run/dbus
     if command -v dbus-daemon >/dev/null 2>&1; then
         dbus-daemon --system --fork || true
         for _ in {1..10}; do
@@ -167,6 +168,8 @@ fi
 # Fallback: Start polkitd manually if supervisor fails
 if ! pgrep polkitd >/dev/null; then
   echo "Starting fallback polkitd..."
+  # Give some time for dbus to be ready
+  sleep 1
   if [ -x /usr/libexec/policykit-1/polkitd ]; then
     /usr/libexec/policykit-1/polkitd --no-debug &
   elif [ -x /usr/lib/policykit-1/polkitd ]; then
