@@ -212,20 +212,6 @@ the browser. This image now includes **Xpra**, which starts automatically and
 provides an HTML5 client on port `14500`. Connect to this port in your browser
 to access the desktop with working audio. The noVNC interface on port `80`
 remains available as a fallback.
-The Xpra process runs with additional options to maximize quality and enable features like file transfer and webcam forwarding. The command in `supervisord.conf` looks like:
-
-```ini
-[program:xpra]
-command=/usr/bin/xpra shadow :1 --bind-tcp=0.0.0.0:14500 --html=on --daemon=no \
-       --pulseaudio=yes --speaker=on --microphone=on --webcam=yes \
-       --file-transfer=yes --clipboard=yes --printing=yes \
-       --video-encoders=all --video-decoders=all --audio-codecs=all \
-       --encodings=rgb24,vpx,webp,jpeg,h264,vp9 \
-       --quality=100 --min-quality=80 --speed=100 --dpi=120
-```
-
-You can connect to the HTML5 client using a URL like `http://localhost:14500/?quality=100&dpi=120` for a crisp high-DPI display.
-
 
 ## Software rendering via Mesa llvmpipe
 
@@ -250,7 +236,7 @@ include:
 - Office suites: LibreOffice, OnlyOffice and WPS Office
 - Web browsers: Google Chrome, Brave, Opera and Firefox
 - Development tools: VS Code, Node.js 22 (via NodeSource), npm, Docker, Docker Compose, Git,
-  GitKraken (via Snap), Postman (via Snap), MySQL Workbench (via Snap) and DBeaver
+  MySQL Workbench (via Snap) and DBeaver
 - Graphics applications: GIMP, Inkscape, Krita, Blender and Darktable
 - Utilities: Flameshot, KDE Connect, Timeshift, Syncthing, OBS Studio and
   Calibre
