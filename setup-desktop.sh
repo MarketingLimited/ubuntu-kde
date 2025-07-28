@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
 
-DESKTOP_DIR="/root/Desktop"
+DEV_USERNAME="${DEV_USERNAME:-devuser}"
+DESKTOP_DIR="/home/${DEV_USERNAME}/Desktop"
 mkdir -p "${DESKTOP_DIR}"
 
 # Wait for flatpak apps to finish installing if flatpak is available
@@ -86,7 +87,7 @@ flatpak_ids=(
 )
 for fapp in "${flatpak_ids[@]}"; do
     for exportdir in /var/lib/flatpak/exports/share/applications \
-        /root/.local/share/flatpak/exports/share/applications; do
+        /home/${DEV_USERNAME}/.local/share/flatpak/exports/share/applications; do
         desktop_path=$(find "${exportdir}" -maxdepth 1 -name "${fapp}*.desktop" 2>/dev/null | head -n1)
         if [[ -n "${desktop_path}" ]]; then
             cp "${desktop_path}" "${DESKTOP_DIR}/"
@@ -104,9 +105,10 @@ for fapp in "${flatpak_ids[@]}"; do
 done
 
 # Add plank to autostart
-mkdir -p /root/.config/autostart
+AUTOSTART_DIR="/home/${DEV_USERNAME}/.config/autostart"
+mkdir -p "${AUTOSTART_DIR}"
 if [[ -f /usr/share/applications/plank.desktop ]]; then
-    cp /usr/share/applications/plank.desktop /root/.config/autostart/
+    cp /usr/share/applications/plank.desktop "${AUTOSTART_DIR}/"
 fi
 
 # Set wallpaper (optional)
@@ -114,3 +116,4 @@ WALLPAPER_URL="https://wallpaperaccess.com/full/3314875.jpg"
 wget -O /usr/share/backgrounds/kde-custom-wallpaper.jpg "${WALLPAPER_URL}" || true
 
 chmod -R +x "${DESKTOP_DIR}"
+chown -R "${DEV_USERNAME}:${DEV_USERNAME}" "${DESKTOP_DIR}" "${AUTOSTART_DIR}"
