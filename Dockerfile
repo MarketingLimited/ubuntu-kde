@@ -123,7 +123,7 @@ export XKL_XMODMAP_DISABLE=1
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 exec dbus-launch --exit-with-session /usr/bin/startplasma-x11
 EOF
-    chmod +x /root/.vnc/xstartup
+RUN chmod +x /root/.vnc/xstartup
 
 
 # Desktop and Flatpak setup scripts
