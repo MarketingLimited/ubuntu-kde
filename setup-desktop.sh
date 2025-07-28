@@ -53,12 +53,21 @@ apps=(
 )
 
 for app in "${apps[@]}"; do
-    if [[ -f "/usr/share/applications/${app}" ]]; then
-        cp "/usr/share/applications/${app}" "${DESKTOP_DIR}/"
-        chmod +x "${DESKTOP_DIR}/${app}"
-        case "${app}" in
+    desktop_path=""
+    for search_dir in /usr/share/applications /var/lib/snapd/desktop/applications; do
+        candidate=$(find "$search_dir" -maxdepth 1 -name "${app}*" -print -quit 2>/dev/null)
+        if [[ -n "$candidate" ]]; then
+            desktop_path="$candidate"
+            break
+        fi
+    done
+    if [[ -n "$desktop_path" && -f "$desktop_path" ]]; then
+        cp "$desktop_path" "${DESKTOP_DIR}/"
+        base_app=$(basename "$desktop_path")
+        chmod +x "${DESKTOP_DIR}/${base_app}"
+        case "$base_app" in
             google-chrome.desktop|brave-browser.desktop|opera.desktop|code.desktop|element-desktop.desktop|signal-desktop.desktop|wire-desktop.desktop)
-                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "${DESKTOP_DIR}/${app}"
+                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "${DESKTOP_DIR}/${base_app}"
                 ;;
             *)
                 ;;

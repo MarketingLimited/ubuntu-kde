@@ -87,6 +87,9 @@ RUN git clone --depth 1 https://github.com/Fmstrat/winapps.git /opt/winapps
 RUN snap install android-studio --classic --no-wait || true
 # Install MySQL Workbench via snap
 RUN snap install mysql-workbench-community || true
+# Install GitKraken and Postman via snap
+RUN snap install gitkraken --classic --no-wait || true
+RUN snap install postman --no-wait || true
 
 # Install Figma from PPA
 RUN add-apt-repository -y ppa:chrdevs/figma \
