@@ -75,7 +75,8 @@ mkdir -p "/home/${DEV_USERNAME}/.vnc"
 cat <<'XEOF' > "/home/${DEV_USERNAME}/.vnc/xstartup"
 #!/bin/sh
 export XKL_XMODMAP_DISABLE=1
-exec dbus-launch --exit-with-session startplasma-x11
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+exec dbus-launch --exit-with-session /usr/bin/startplasma-x11
 XEOF
 chown -R "${DEV_USERNAME}":"${DEV_USERNAME}" "/home/${DEV_USERNAME}/.vnc"
 chmod +x "/home/${DEV_USERNAME}/.vnc/xstartup"

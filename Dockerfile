@@ -117,9 +117,12 @@ ENV TTYD_USER=terminal
 ENV TTYD_PASSWORD=terminal
 # VNC xstartup: launch KDE Plasma
 RUN mkdir -p /var/run/sshd /root/.vnc && \
-    echo '#!/bin/sh\n\
-export XKL_XMODMAP_DISABLE=1\n\
-exec dbus-launch --exit-with-session startplasma-x11' > /root/.vnc/xstartup && \
+    cat <<'EOF' >/root/.vnc/xstartup && \
+#!/bin/sh
+export XKL_XMODMAP_DISABLE=1
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+exec dbus-launch --exit-with-session /usr/bin/startplasma-x11
+EOF
     chmod +x /root/.vnc/xstartup
 
 
