@@ -193,6 +193,21 @@ Ensure the host's sound device is passed through by mapping `/dev/snd` when
 running the container. The included `docker-compose.yml` already exposes this
 device.
 
+If your host does not provide a real sound card you can load the Linux
+`snd-dummy` module to create a virtual one before starting the container:
+
+```bash
+sudo modprobe snd-dummy
+```
+
+After the module is loaded restart the container so `/dev/snd` appears inside
+it and PulseAudio can output audio.
+
+noVNC itself only handles the graphical display and does not forward sound to
+the browser. To stream audio to web clients you can run a remote desktop server
+that supports audio, such as **Xpra**, and expose its HTML5 client alongside or
+instead of VNC.
+
 
 ## Pre-installed applications
 
