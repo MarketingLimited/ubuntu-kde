@@ -43,3 +43,5 @@ services:
       - LSIO_FIRST_PARTY=true
     volumes:
       - /mnt/docker/mohamed-web/webtop_config:/config
+    devices:
+      - /dev/snd:/dev/snd
