@@ -53,25 +53,12 @@ apps=(
 )
 
 for app in "${apps[@]}"; do
-    desktop_path=""
-    for search_dir in /usr/share/applications /var/lib/snapd/desktop/applications; do
-        if [ -d "$search_dir" ]; then
-            candidate=$(find "$search_dir" -maxdepth 1 -name "${app}*" -print -quit 2>/dev/null || true)
-        else
-            candidate=""
-        fi
-        if [[ -n "$candidate" ]]; then
-            desktop_path="$candidate"
-            break
-        fi
-    done
-    if [[ -n "$desktop_path" && -f "$desktop_path" ]]; then
-        cp "$desktop_path" "${DESKTOP_DIR}/"
-        base_app=$(basename "$desktop_path")
-        chmod +x "${DESKTOP_DIR}/${base_app}"
-        case "$base_app" in
+    if [[ -f "/usr/share/applications/${app}" ]]; then
+        cp "/usr/share/applications/${app}" "${DESKTOP_DIR}/"
+        chmod +x "${DESKTOP_DIR}/${app}"
+        case "${app}" in
             google-chrome.desktop|brave-browser.desktop|opera.desktop|code.desktop|element-desktop.desktop|signal-desktop.desktop|wire-desktop.desktop)
-                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "${DESKTOP_DIR}/${base_app}"
+                sed -i '/^Exec=/ s@ %U@ --no-sandbox %U@; /^Exec=/ s@ %F@ --no-sandbox %F@; /^Exec=/ {/--no-sandbox/! s@$@ --no-sandbox@}' "${DESKTOP_DIR}/${app}"
                 ;;
             *)
                 ;;
@@ -101,11 +88,7 @@ flatpak_ids=(
 for fapp in "${flatpak_ids[@]}"; do
     for exportdir in /var/lib/flatpak/exports/share/applications \
         /home/${DEV_USERNAME}/.local/share/flatpak/exports/share/applications; do
-        if [ -d "${exportdir}" ]; then
-            desktop_path=$(find "${exportdir}" -maxdepth 1 -name "${fapp}*.desktop" 2>/dev/null | head -n1 || true)
-        else
-            desktop_path=""
-        fi
+        desktop_path=$(find "${exportdir}" -maxdepth 1 -name "${fapp}*.desktop" 2>/dev/null | head -n1)
         if [[ -n "${desktop_path}" ]]; then
             cp "${desktop_path}" "${DESKTOP_DIR}/"
             desktop_file="${DESKTOP_DIR}/$(basename "${desktop_path}")"
