@@ -152,8 +152,12 @@ chown -R "${ADMIN_USERNAME}:${ADMIN_USERNAME}" "/home/${ADMIN_USERNAME}"
 
 # Ensure binder/ashmem are available for Waydroid
 if command -v modprobe >/dev/null 2>&1; then
-    modprobe binder_linux || true
-    modprobe ashmem_linux || true
+    if modinfo binder_linux >/dev/null 2>&1; then
+        modprobe binder_linux >/dev/null 2>&1 || true
+    fi
+    if modinfo ashmem_linux >/dev/null 2>&1; then
+        modprobe ashmem_linux >/dev/null 2>&1 || true
+    fi
 fi
 mkdir -p /dev/binderfs
 if ! mountpoint -q /dev/binderfs; then
