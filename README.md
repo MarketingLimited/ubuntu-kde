@@ -186,6 +186,13 @@ waydroid init
 waydroid session start
 ```
 
+## Audio support
+
+The container runs a PulseAudio server so graphical applications can output sound.
+Ensure the host's sound device is passed through by mapping `/dev/snd` when
+running the container. The included `docker-compose.yml` already exposes this
+device.
+
 
 ## Pre-installed applications
 

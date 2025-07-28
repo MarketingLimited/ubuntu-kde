@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     dbus-x11 x11-xserver-utils xfonts-base snapd kmod \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice policykit-1 \
-    openssh-server ttyd libcap2-bin polkit-kde-agent-1 \
+    openssh-server ttyd libcap2-bin polkit-kde-agent-1 pulseaudio pavucontrol \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
