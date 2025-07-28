@@ -1,6 +1,7 @@
 # Ubuntu KDE Webtop
 
-This repository builds a Docker container running the KDE desktop environment exposed over VNC.
+This repository builds a Docker container running the KDE desktop environment
+exposed over VNC and Xpra.
 
 ## Requirements
 - Docker Engine
@@ -33,6 +34,8 @@ The container exposes an SSH server on port `22` and a web terminal on port
 ```yaml
   - "2222:22"      # SSH
   - "7681:7681"    # ttyd web terminal
+  - "32768:80"    # noVNC web interface
+  - "14500:14500"  # Xpra HTML5 client
 ```
 
 The default credentials for the web terminal are `terminal` / `terminal`. You
@@ -176,6 +179,7 @@ docker run -d --name webtop-kde \
   --privileged \
   -v /dev/binderfs:/dev/binderfs \
   -p 32768:80 -p 2222:22 -p 7681:7681 \
+  -p 14500:14500 \
   webtop-kde:latest
 ```
 
@@ -204,9 +208,10 @@ After the module is loaded restart the container so `/dev/snd` appears inside
 it and PulseAudio can output audio.
 
 noVNC itself only handles the graphical display and does not forward sound to
-the browser. To stream audio to web clients you can run a remote desktop server
-that supports audio, such as **Xpra**, and expose its HTML5 client alongside or
-instead of VNC.
+the browser. This image now includes **Xpra**, which starts automatically and
+provides an HTML5 client on port `14500`. Connect to this port in your browser
+to access the desktop with working audio. The noVNC interface on port `80`
+remains available as a fallback.
 
 ## Software rendering via Mesa llvmpipe
 

@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     mesa-utils libgl1-mesa-dri libgl1-mesa-glx libosmesa6 libglu1-mesa \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice policykit-1 \
-    openssh-server ttyd libcap2-bin polkit-kde-agent-1 pulseaudio pavucontrol \
+    openssh-server ttyd libcap2-bin polkit-kde-agent-1 pulseaudio pavucontrol xpra \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add repositories for Chrome, Opera, Brave, VS Code
@@ -148,6 +148,6 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 22 80 5901 7681
+EXPOSE 22 80 5901 7681 14500
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
