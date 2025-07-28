@@ -208,6 +208,19 @@ the browser. To stream audio to web clients you can run a remote desktop server
 that supports audio, such as **Xpra**, and expose its HTML5 client alongside or
 instead of VNC.
 
+## Software rendering via Mesa llvmpipe
+
+Mesa's software rasterizer packages are installed in the image so GPU-heavy
+applications can run even without dedicated graphics hardware. Verify the
+active renderer with:
+
+```bash
+glxinfo | grep "OpenGL renderer"
+```
+
+The output should mention **llvmpipe**, confirming Mesa's CPU-based rendering is
+in use.
+
 
 ## Pre-installed applications
 
