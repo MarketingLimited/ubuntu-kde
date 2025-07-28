@@ -10,6 +10,11 @@ ADMIN_USERNAME=${ADMIN_USERNAME:-adminuser}
 ADMIN_PASSWORD=${ADMIN_PASSWORD:-AdminPassw0rd!}
 ROOT_PASSWORD=${ROOT_PASSWORD:-ComplexP@ssw0rd!}
 
+# Replace default username in polkit rule if different
+if [ -f /etc/polkit-1/rules.d/99-devuser-all.rules ]; then
+    sed -i "s/\"devuser\"/\"${DEV_USERNAME}\"/" /etc/polkit-1/rules.d/99-devuser-all.rules
+fi
+
 # Update root password if provided
 if [ -n "$ROOT_PASSWORD" ]; then
     echo "root:${ROOT_PASSWORD}" | chpasswd
@@ -142,8 +147,8 @@ fi
 
 
 # Fix permissions so KDE apps can write files
-chown -R devuser:devuser /home/devuser
-chown -R adminuser:adminuser /home/adminuser
+chown -R "${DEV_USERNAME}:${DEV_USERNAME}" "/home/${DEV_USERNAME}"
+chown -R "${ADMIN_USERNAME}:${ADMIN_USERNAME}" "/home/${ADMIN_USERNAME}"
 
 # Ensure binder/ashmem are available for Waydroid
 if command -v modprobe >/dev/null 2>&1; then
