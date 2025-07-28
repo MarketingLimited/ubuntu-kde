@@ -235,8 +235,8 @@ include:
 
 - Office suites: LibreOffice, OnlyOffice and WPS Office
 - Web browsers: Google Chrome, Brave, Opera and Firefox
-- Development tools: VS Code, Node.js 20 (via NodeSource), npm, Docker, Docker Compose, Git,
-  MySQL Workbench and DBeaver
+- Development tools: VS Code, Node.js 22 (via NodeSource), npm, Docker, Docker Compose, Git,
+  MySQL Workbench (via Snap) and DBeaver
 - Graphics applications: GIMP, Inkscape, Krita, Blender and Darktable
 - Utilities: Flameshot, KDE Connect, Timeshift, Syncthing, OBS Studio and
   Calibre

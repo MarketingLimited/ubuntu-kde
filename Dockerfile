@@ -85,6 +85,8 @@ RUN snap install anbox --beta --devmode || true
 RUN git clone --depth 1 https://github.com/Fmstrat/winapps.git /opt/winapps
 # Install Android Studio without AVD
 RUN snap install android-studio --classic --no-wait || true
+# Install MySQL Workbench via snap
+RUN snap install mysql-workbench-community || true
 
 # Install Figma from PPA
 RUN add-apt-repository -y ppa:chrdevs/figma \
