@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
     supervisor tigervnc-standalone-server tigervnc-common novnc websockify \
     dbus-x11 x11-xserver-utils xfonts-base snapd kmod \
-    mesa-utils libgl1-mesa-dri libgl1-mesa-glx libosmesa6 libglu1-mesa \
+    mesa-utils libgl1-mesa-dri libglx-mesa0 libosmesa6 libglu1-mesa \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
     dosbox gnome-terminal lxterminal terminator accountsservice policykit-1 \
     openssh-server ttyd libcap2-bin polkit-kde-agent-1 pulseaudio pavucontrol xpra \
