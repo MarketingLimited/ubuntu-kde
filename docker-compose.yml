@@ -10,38 +10,8 @@ services:
       - 2222:22
       - 7681:7681
       - 14500:14500
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Bahrain
-      - TITLE=Ubuntu KDE
-      - DEV_USERNAME=${DEV_USERNAME:-devuser}
-      - DEV_PASSWORD=${DEV_PASSWORD:-DevPassw0rd!}
-      - DEV_UID=${DEV_UID:-1000}
-      - DEV_GID=${DEV_GID:-1000}
-      - ADMIN_USERNAME=${ADMIN_USERNAME:-adminuser}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-AdminPassw0rd!}
-      - ROOT_PASSWORD=${ROOT_PASSWORD:-ComplexP@ssw0rd!}
-      - DISPLAY=:1
-      - START_DOCKER=true
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - DISABLE_ZINK=false
-      - NO_GAMEPAD=true
-      - TTYD_USER=${TTYD_USER:-terminal}
-      - TTYD_PASSWORD=${TTYD_PASSWORD:-terminal}
-      - PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - HOME=/root
-      - LANGUAGE=en_US.UTF-8
-      - LANG=en_US.UTF-8
-      - TERM=xterm
-      - S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
-      - S6_VERBOSITY=1
-      - S6_STAGE2_HOOK=/docker-mods
-      - VIRTUAL_ENV=/lsiopy
-      - PERL5LIB=/usr/local/bin
-      - PULSE_RUNTIME_PATH=/defaults
-      - SELKIES_INTERPOSER=/usr/lib/selkies_joystick_interposer.so
-      - LSIO_FIRST_PARTY=true
+    env_file:
+      - .env
     volumes:
       - /mnt/docker/mohamed-web/webtop_config:/config
     devices:

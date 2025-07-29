@@ -28,6 +28,8 @@ apps=(
     "org.mozilla.firefox"
     "com.usebottles.bottles"
     "org.phoenicis.playonlinux"
+    "com.mysql.Workbench"
+    "com.google.AndroidStudio"
 )
 
 for app in "${apps[@]}"; do

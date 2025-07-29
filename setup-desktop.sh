@@ -30,15 +30,11 @@ apps=(
     "krita.desktop"
     "blender.desktop"
     "darktable.desktop"
-    "shutter.desktop"
-    "winff.desktop"
-    "kodi.desktop"
     "okular.desktop"
     "obs.desktop"
     "calibre-gui.desktop"
     "gitkraken.desktop"
     "postman.desktop"
-    "mysql-workbench.desktop"
     "dbeaver.desktop"
     "wire-desktop.desktop"
     "element-desktop.desktop"
@@ -84,6 +80,8 @@ flatpak_ids=(
     "org.mozilla.firefox"
     "com.usebottles.bottles"
     "org.phoenicis.playonlinux"
+    "com.mysql.Workbench"
+    "com.google.AndroidStudio"
 )
 for fapp in "${flatpak_ids[@]}"; do
     for exportdir in /var/lib/flatpak/exports/share/applications \
@@ -110,6 +108,34 @@ mkdir -p "${AUTOSTART_DIR}"
 if [[ -f /usr/share/applications/plank.desktop ]]; then
     cp /usr/share/applications/plank.desktop "${AUTOSTART_DIR}/"
 fi
+
+# Create Waydroid shortcut
+cat <<EOF > "${DESKTOP_DIR}/Waydroid.desktop"
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Waydroid
+Comment=Run Android applications
+Exec=waydroid show-apps
+Icon=waydroid
+Categories=System;
+Terminal=false
+EOF
+chmod +x "${DESKTOP_DIR}/Waydroid.desktop"
+
+# Create Google Ads Editor shortcut
+cat <<EOF > "${DESKTOP_DIR}/GoogleAdsEditor.desktop"
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Google Ads Editor
+Comment=Manage your Google Ads campaigns
+Exec=wine "/home/${DEV_USERNAME}/.wine/drive_c/Program Files/Google/Google Ads Editor/google_ads_editor.exe"
+Icon=wine
+Categories=Office;
+Terminal=false
+EOF
+chmod +x "${DESKTOP_DIR}/GoogleAdsEditor.desktop"
 
 # Set wallpaper (optional)
 WALLPAPER_URL="https://wallpaperaccess.com/full/3314875.jpg"
