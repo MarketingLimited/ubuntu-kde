@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates lsb-release htop net-tools unzip locales \
     kde-plasma-desktop dolphin kate okular konsole \
     openbox tint2 xterm \
-    libreoffice vlc gimp inkscape shutter winff kodi plank \
+    libreoffice vlc gimp inkscape plank \
     flatpak gnome-software-plugin-flatpak \
     flameshot kdeconnect timeshift syncthing syncthing-gtk \
     krita blender darktable obs-studio calibre \
@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     dbus-x11 x11-xserver-utils xfonts-base snapd kmod \
     mesa-utils libgl1-mesa-dri libglx-mesa0 libosmesa6 libglu1-mesa \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
-    dosbox gnome-terminal lxterminal terminator accountsservice policykit-1 \
+    gnome-terminal lxterminal terminator accountsservice policykit-1 \
     openssh-server ttyd libcap2-bin polkit-kde-agent-1 pulseaudio pavucontrol xpra \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -79,14 +79,8 @@ RUN for f in google-chrome.desktop brave-browser.desktop opera.desktop code.desk
 # Install Waydroid repository and package
 RUN curl -fsSL https://repo.waydro.id | bash \
     && apt-get install -y waydroid && apt-get clean && rm -rf /var/lib/apt/lists/*
-# Optional Anbox support via snap
-RUN snap install anbox --beta --devmode || true
 # Clone WinApps for Linux
 RUN git clone --depth 1 https://github.com/Fmstrat/winapps.git /opt/winapps
-# Install Android Studio without AVD
-RUN snap install android-studio --classic --no-wait || true
-# Install MySQL Workbench via snap
-RUN snap install mysql-workbench-community || true
 
 # Install Figma from PPA
 RUN add-apt-repository -y ppa:chrdevs/figma \

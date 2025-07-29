@@ -2,13 +2,13 @@
 set -e
 
 # Default credentials and IDs can be overridden via environment variables
-DEV_USERNAME=${DEV_USERNAME:-devuser}
-DEV_PASSWORD=${DEV_PASSWORD:-DevPassw0rd!}
-DEV_UID=${DEV_UID:-1000}
-DEV_GID=${DEV_GID:-1000}
-ADMIN_USERNAME=${ADMIN_USERNAME:-adminuser}
-ADMIN_PASSWORD=${ADMIN_PASSWORD:-AdminPassw0rd!}
-ROOT_PASSWORD=${ROOT_PASSWORD:-ComplexP@ssw0rd!}
+: "${DEV_USERNAME:=devuser}"
+: "${DEV_PASSWORD:=DevPassw0rd!}"
+: "${DEV_UID:=1000}"
+: "${DEV_GID:=1000}"
+: "${ADMIN_USERNAME:=adminuser}"
+: "${ADMIN_PASSWORD:=AdminPassw0rd!}"
+: "${ROOT_PASSWORD:=ComplexP@ssw0rd!}"
 
 # Replace default username in polkit rule if different
 if [ -f /etc/polkit-1/rules.d/99-devuser-all.rules ]; then
