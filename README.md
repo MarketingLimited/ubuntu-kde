@@ -29,10 +29,7 @@ This project provides a Dockerized, all-in-one, web-accessible Ubuntu KDE deskto
 
 3. **Build and Run:**
    ```bash
-   # If you have the Docker Compose plugin
    docker compose up -d
-   # Or if you're using the legacy docker-compose binary
-   docker-compose up -d
    ```
    This will build the Docker image and start the webtop container in the background.
 
@@ -40,6 +37,7 @@ This project provides a Dockerized, all-in-one, web-accessible Ubuntu KDE deskto
 
 | Service               | URL                                      | Credentials        |
 | --------------------- | ---------------------------------------- | ------------------ |
+| KDE Desktop (noVNC)   | `http://<your-server-ip>:32768`          | -                  |
 | KDE Desktop (Xpra)    | `http://<your-server-ip>:14500`          | -                  |
 | Terminal (ttyd)       | `http://<your-server-ip>:7681`           | `TTYD_USER` / `TTYD_PASSWORD` |
 | SSH                   | `ssh <ADMIN_USERNAME>@<your-server-ip> -p 2222` | `ADMIN_PASSWORD`   |
@@ -48,8 +46,8 @@ This project provides a Dockerized, all-in-one, web-accessible Ubuntu KDE deskto
 - **Credentials**: The values you set in your `.env` file.
 
 ## Usage
-- **Desktop:** Access the full KDE Plasma desktop through your web browser using the Xpra HTML5 client.
 
+- **Desktop:** Access the full KDE Plasma desktop through your web browser using either noVNC or the Xpra HTML5 client.
 - **Applications:** Launch applications from the desktop, application menu, or via the terminal.
 - **Waydroid:** Launch the Waydroid application from the desktop to start the Android container. You can then install and run Android APKs.
 - **Wine:** Windows applications can be installed and run using the provided PlayOnLinux utility or by running the installer directly from the terminal (e.g., `wine setup.exe`).

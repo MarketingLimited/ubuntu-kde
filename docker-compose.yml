@@ -6,6 +6,7 @@ services:
     privileged: true
     shm_size: "2gb"
     ports:
+      - 32768:80
       - 2222:22
       - 7681:7681
       - 14500:14500

@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
     nextcloud-desktop \
     fonts-noto-core fonts-noto-ui-core fonts-noto-color-emoji fonts-noto-extra \
     fonts-dejavu fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri fonts-kacst qttranslations5-l10n libqt5script5 fonts-freefont-ttf \
-    supervisor \
+    supervisor tigervnc-standalone-server tigervnc-common novnc websockify \
     dbus-x11 x11-xserver-utils xfonts-base snapd kmod \
     mesa-utils libgl1-mesa-dri libglx-mesa0 libosmesa6 libglu1-mesa \
     wine playonlinux qemu-system qemu-utils qemu-kvm \
@@ -111,6 +111,15 @@ ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 ENV TTYD_USER=terminal
 ENV TTYD_PASSWORD=terminal
+# VNC xstartup: launch KDE Plasma
+RUN mkdir -p /var/run/sshd /root/.vnc && \
+    cat <<'EOF' >/root/.vnc/xstartup && \
+#!/bin/sh
+export XKL_XMODMAP_DISABLE=1
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+exec dbus-launch --exit-with-session /usr/bin/startplasma-x11
+EOF
+RUN chmod +x /root/.vnc/xstartup
 
 
 # Desktop and Flatpak setup scripts
@@ -138,6 +147,6 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 22 7681 14500
+EXPOSE 22 80 5901 7681 14500
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
