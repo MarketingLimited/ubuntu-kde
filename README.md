@@ -29,7 +29,10 @@ This project provides a Dockerized, all-in-one, web-accessible Ubuntu KDE deskto
 
 3. **Build and Run:**
    ```bash
+   # If you have the Docker Compose plugin
    docker compose up -d
+   # Or if you're using the legacy docker-compose binary
+   docker-compose up -d
    ```
    This will build the Docker image and start the webtop container in the background.
 
